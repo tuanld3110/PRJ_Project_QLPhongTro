@@ -6,6 +6,7 @@
 package Controller;
 
 import DAO.Home;
+import DTO.PhongTro;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -40,17 +41,58 @@ public class CRUDPhongTroServlet extends HttpServlet {
             /* TODO output your page here. You may use following sample code. */
             String id = request.getParameter("id");
             String type = request.getParameter("type");
-            String manage = request.getParameter("manage");
-            switch (manage) {
-                case "phongtro":
-                    if(type.equals("del")){
-                        DAO.Home.UpdateAnDeletePhongTro("UPDATE phongTro SET trangThai = 0 WHERE idPhong="+id);
-                        response.sendRedirect("QLPhong.jsp");
-                    }else{
-                        
+            String manage = null;
+            try {
+                manage = request.getParameter("manage");
+            } catch (Exception e) {
+                manage = request.getAttribute("manage").toString();
+                System.out.println(e);
+            }
+            switch (type) {
+                case "del":
+                    DAO.Home.DeletePhongTro("UPDATE phongTro SET trangThai = 0 WHERE idPhong=" + id);
+                    response.sendRedirect("QLPhong.jsp");
+                    break;
+                case "edit":
+                    request.setAttribute("type", "edit");
+                    request.setAttribute("id", id);
+                    request.getRequestDispatcher("ThemVaSuaPhong.jsp").forward(request, response);
+                    break;
+                case "Cancel":
+                    response.sendRedirect("QLPhong.jsp");
+                    break;
+                case "ApplyEdit":
+                    try {
+                        PhongTro dto = new PhongTro();
+                        dto.setIdPhong(Integer.parseInt(request.getParameter("idPhong")));
+                        dto.setIdKH(Integer.parseInt(request.getParameter("idKH")));
+                        dto.setThangThue(Integer.parseInt(request.getParameter("ThangThue")));
+                        dto.setGiaThue(Float.parseFloat(request.getParameter("GiaThue")));
+                        if (Integer.parseInt(request.getParameter("idKH")) == 0) {
+                            dto.setTrangThai(2);
+                        } else {
+                            dto.setTrangThai(1);
+                        }
+                        DAO.Home.UpdatePhongTro(dto);
+                        request.getRequestDispatcher("QLPhong.jsp").forward(request, response);
+                    } catch (Exception e) {
+                        System.out.println(e);
+                    }
+                    break;
+                case "add":
+                    try {
+                        PhongTro dto = new PhongTro();
+                        dto.setIdKH(Integer.parseInt(request.getParameter("idKH")));
+                        dto.setThangThue(Integer.parseInt(request.getParameter("ThangThue")));
+                        dto.setGiaThue(Float.parseFloat(request.getParameter("GiaThue")));
+                        DAO.Home.InsertPhongTro(dto);
+                        request.getRequestDispatcher("QLPhong.jsp").forward(request, response);
+                    } catch (Exception e) {
+                        System.out.println(e);
                     }
                     break;
             }
+
         }
     }
 

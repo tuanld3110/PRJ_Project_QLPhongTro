@@ -11,17 +11,17 @@ package DTO;
  */
 public class KhachHang {
     int idKH, gioiTinh;
-    String tenKH, SDT, diaChi;
+    String tenKH, SDT, CMND;
 
     public KhachHang() {
     }
 
-    public KhachHang(int idKH, int gioiTinh, String tenKH, String SDT, String diaChi) {
+    public KhachHang(int idKH, int gioiTinh, String tenKH, String SDT, String CMND) {
         this.idKH = idKH;
         this.gioiTinh = gioiTinh;
         this.tenKH = tenKH;
         this.SDT = SDT;
-        this.diaChi = diaChi;
+        this.CMND = CMND;
     }
 
     public int getIdKH() {
@@ -56,12 +56,12 @@ public class KhachHang {
         this.SDT = SDT;
     }
 
-    public String getDiaChi() {
-        return diaChi;
+    public String getCMND() {
+        return CMND;
     }
 
-    public void setDiaChi(String diaChi) {
-        this.diaChi = diaChi;
+    public void setCMND(String CMND) {
+        this.CMND = CMND;
     }
     
 }

@@ -4,6 +4,7 @@
     Author     : crrtt
 --%>
 
+<%@page import="DTO.KhachHang"%>
 <%@page import="javax.xml.ws.Holder"%>
 <%@page import="DTO.PhongTro"%>
 <%@page import="java.util.ArrayList"%>
@@ -32,6 +33,12 @@
 
         <!-- Custom styles for this page -->
         <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+        <style>
+            select[readonly]{
+                pointer-events: none;
+                touch-action: none;
+            }
+        </style>
 
     </head>
 
@@ -44,7 +51,7 @@
             <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
                 <!-- Sidebar - Brand -->
-                <a class="sidebar-brand d-flex align-items-center justify-content-center" href="Home.jsp">
+                <a class="sidebar-brand d-flex align-items-center justify-content-center" href="QLPhong.jsp">
                     <div class="sidebar-brand-icon rotate-n-15">
                         <i class="fas fa-laugh-wink"></i>
                     </div>
@@ -155,61 +162,94 @@
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <form action="Login" method="POST">
+                                    <form action="CRUDPhongTroServlet" method="GET">
                                         <%
-                                             String type = "";
+                                            String type = "";
+                                            request.setAttribute("manage", "phongtro");
                                             try {
-                                                type = request.getParameter("type");
+                                                type = request.getAttribute("type").toString();
                                             } catch (Exception e) {
-                                                System.out.println(e);
+                                                type = "add";
                                             }
                                             if (type == "edit") {
+
+                                                ArrayList<PhongTro> a3 = DAO.Home.getPhongTroByID(Integer.parseInt(request.getAttribute("id").toString()));
+                                                for (PhongTro dtophongtro : a3) {
                                         %>
+
                                         <h3 class="mb-5">Thay đổi thông tin</h3>
+                                        <div class="form-outline mb-4">
+                                            <h6 class="m-0 font-weight-bold text-primary">Mã phòng</h6>
+                                            <select name="idPhong" class="form-control form-control-lg" readonly>
+                                                <option value="<%=  dtophongtro.getIdPhong()%>"><%=  dtophongtro.getIdPhong()%></option>
+                                            </select>
+                                        </div>
+                                        <h6 class="m-0 font-weight-bold text-primary">Người thuê</h6>
+                                        <div class="form-outline mb-4">
+                                            <select name="idKH" class="form-control form-control-lg"  id="gender">
+                                                <%
+                                                    ArrayList<KhachHang> a2 = DAO.Home.getKhachHang();
+                                                    for (KhachHang dto : a2) {
+                                                %>
+                                                <option value="<%= dto.getIdKH()%>"><%= dto.getTenKH()%></option>
+                                                <%
+                                                    }
+                                                %>
+                                                <option value="0">Trống</option>
+                                            </select>
+                                        </div>
+                                        <h6 class="m-0 font-weight-bold text-primary">Tháng thuê</h6>
+                                        <div class="form-outline mb-4">
+                                            <input name="ThangThue" type="number" id="typeEmailX-2" class="form-control form-control-lg" placeholder="Tháng Thuê" value="<%= dtophongtro.getThangThue()%>" readonly=""/>
+                                        </div>
+                                        <h6 class="m-0 font-weight-bold text-primary">Giá thuê</h6>
+                                        <div class="form-outline mb-4">
+                                            <input name="GiaThue" type="number" id="typeEmailX-2" class="form-control form-control-lg" placeholder="Giá Thuê" value="<%= dtophongtro.getGiaThue()%>"/>
+                                        </div>
+                                        <%
+                                            }
+                                        %>
+                                        <button class="btn btn-primary btn-lg btn-block" type="submit" name="type" value="ApplyEdit">Thay đổi</button>
+                                        <button class="btn btn-primary btn-lg btn-block" type="submit" name="type" value="Cancel">Huỷ</button>
                                         <%
                                         } else {
                                         %>
                                         <h3 class="mb-5">Thêm Phòng Trọ</h3>
-                                        <%
-                                            }
-                                        %>
+                                        <h6 class="m-0 font-weight-bold text-primary">Người thuê</h6>
                                         <div class="form-outline mb-4">
-                                            <select name="idPhong" class="form-control form-control-lg"  id="gender">
+                                            <select name="idKH" class="form-control form-control-lg"  id="gender">
                                                 <%
-                                                ArrayList<PhongTro> a1 = DAO.Home.getPhongTro();
-                                                for(PhongTro dto: a1 ){
+                                                    ArrayList<KhachHang> a2 = DAO.Home.getKhachHang();
+                                                    for (KhachHang dto : a2) {
                                                 %>
-                                                <option value="<%= dto.getIdPhong()%>"><%= dto.getIdPhong()%></option>
+                                                <option value="<%= dto.getIdKH()%>"><%= dto.getTenKH()%></option>
                                                 <%
-                                                }
+                                                    }
                                                 %>
                                             </select>
                                         </div>
+                                        <h6 class="m-0 font-weight-bold text-primary">Tháng thuê</h6>
                                         <div class="form-outline mb-4">
-                                            <input name="phone" type="number" id="typeEmailX-2" class="form-control form-control-lg" placeholder="Số điện thoại"/>
-                                        </div>
-                                        <div class="form-outline mb-4">
-                                            <input name="cmnd" type="number" id="typeEmailX-2" class="form-control form-control-lg" placeholder="CMND"/>
-                                        </div>
-                                        <div class="form-outline mb-4">
-                                            <select name="gender" class="form-control form-control-lg"  id="gender">
-                                                <option value="1">Nam</option>
-                                                <option value="2">Nữ</option>
-                                                <option value="0">Khác</option>
+                                            <select name="ThangThue" class="form-control form-control-lg"  id="Thangthue">
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                                <option value="6">6</option>
+                                                <option value="7">7</option>
+                                                <option value="8">8</option>
+                                                <option value="9">9</option>
+                                                <option value="10">10</option>
+                                                <option value="11">11</option>
+                                                <option value="12">12</option>
                                             </select>
                                         </div>
+                                        <h6 class="m-0 font-weight-bold text-primary">Giá thuê</h6>
                                         <div class="form-outline mb-4">
-                                            <input name="password" type="password" id="typePasswordX-2" class="form-control form-control-lg" placeholder="Password" />
+                                            <input name="GiaThue" type="number" id="typeEmailX-2" class="form-control form-control-lg" placeholder="Giá Thuê"/>
                                         </div>
-                                        <%
-                                        if (type == "edit") {
-                                        %>
-                                         <button class="btn btn-primary btn-lg btn-block" type="submit">Thay đổi</button>
-                                         <button class="btn btn-primary btn-lg btn-block" type="submit">Huỷ</button>
-                                        <%
-                                        } else {
-                                        %>
-                                        <button class="btn btn-primary btn-lg btn-block" type="submit">Thêm</button>
+                                        <button class="btn btn-primary btn-lg btn-block" type="submit" name="type" value="add">Thêm</button>
                                         <%
                                             }
                                         %>

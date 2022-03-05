@@ -17,11 +17,6 @@ import java.sql.SQLException;
  */
 public class Login {
 
-    public static void main(String[] args) throws SQLException {
-        boolean loginStatus = Login("1", "1");
-        System.out.println(loginStatus);
-    }
-
     public static boolean Login(String username, String password) throws SQLServerException, SQLException {
         boolean loginStatus = false;
         Connection conn = DB.DBUtilities.getConnection();

@@ -4,6 +4,7 @@
     Author     : crrtt
 --%>
 
+<%@page import="DTO.KhachHang"%>
 <%@page import="javax.xml.ws.Holder"%>
 <%@page import="DTO.PhongTro"%>
 <%@page import="java.util.ArrayList"%>
@@ -159,7 +160,7 @@
                                         <thead>
                                             <tr>
                                                 <th>ID Phòng</th>
-                                                <th>ID Khách Hàng</th>
+                                                <th>Khách Hàng</th>
                                                 <th>Tháng thuê</th>
                                                 <th>Giá Thuê</th>
                                                 <th>Trạng Thái</th>
@@ -172,15 +173,48 @@
                                         <tbody>
                                             <%
                                                 for (PhongTro p : al) {
+                                                    if (p.getTrangThai() != 0) {
                                             %>
                                             <tr>
                                                 <td><%= p.getIdPhong()%></td>
-                                                <td><%= p.getIdKH()%></td>
+                                                <td><%if (p.getIdKH() != 0) {
+                                                    %>
+
+                                                    <%
+                                                        ArrayList<KhachHang> a2 = DAO.Home.getKhachHangByID(p.getIdKH());
+                                                        for (KhachHang kh : a2) {
+                                                    %>
+
+                                                    <%= kh.getTenKH()%>
+                                                    
+                                                    <%
+                                                        }
+                                                    } else {
+                                                    %>
+                                                    Trống
+                                                    <%
+                                                        }
+                                                    %>
+                                                </td>
                                                 <td><%= p.getThangThue()%></td>
                                                 <td><%= p.getGiaThue()%></td>
-                                                <td><%= p.getTrangThai()%></td>
+                                                <td><%if (p.getTrangThai() == 1) {
+                                                    %>
+                                                    Được Thuê
+                                                    <%
+                                                    } else if (p.getTrangThai() == 2) {
+                                                    %>
+                                                    Trống
+                                                    <%
+                                                    } else {
+                                                    %>
+                                                    Đang sửa chữa
+                                                    <%
+                                                        }
+                                                    %>
+                                                </td>
                                                 <td>
-                                                    <a class="btn btn-danger btn-circle" data-toggle="modal" data-target="#logoutModal" style="margin-left: 24%;">
+                                                    <a href="CRUDPhongTroServlet?id=<%= p.getIdPhong()%>&type=del&manage=phongtro" class="btn btn-danger btn-circle" style="margin-left: 24%;">
                                                         <i class="fas fa-trash"></i>
                                                     </a>
                                                     <a href="CRUDPhongTroServlet?id=<%= p.getIdPhong()%>&type=edit&manage=phongtro" class="btn btn-info btn-circle">
@@ -188,25 +222,8 @@
                                                     </a>
                                                 </td>
                                             </tr>
-                                        <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-                                             aria-hidden="true">
-                                            <div class="modal-dialog" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="exampleModalLabel">Are you sure to delete this Column?</h5>
-                                                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                                                            <span aria-hidden="true">×</span>
-                                                        </button>
-                                                    </div>
-                                                    <div class="modal-body">Select "Yes" below if you are sure to delete currect column.</div>
-                                                    <div class="modal-footer">
-                                                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                                                        <a class="btn btn-primary" href="CRUDPhongTroServlet?id=<%= p.getIdPhong()%>&type=del&manage=phongtro">Yes</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
                                         <%
+                                                }
                                             }
                                         %>
                                         </tbody>
