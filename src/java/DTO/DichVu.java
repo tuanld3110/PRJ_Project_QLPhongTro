@@ -11,16 +11,17 @@ package DTO;
  */
 public class DichVu {
 
-    int idDV, idThuTien;
+    int idDV, idThuTien,trangThai;
     String tenDV;
     float giaDV;
 
     public DichVu() {
     }
 
-    public DichVu(int idDV, int idThuTien, String tenDV, float giaDV) {
+    public DichVu(int idDV, int idThuTien, int trangThai, String tenDV, float giaDV) {
         this.idDV = idDV;
         this.idThuTien = idThuTien;
+        this.trangThai = trangThai;
         this.tenDV = tenDV;
         this.giaDV = giaDV;
     }
@@ -41,6 +42,14 @@ public class DichVu {
         this.idThuTien = idThuTien;
     }
 
+    public int getTrangThai() {
+        return trangThai;
+    }
+
+    public void setTrangThai(int trangThai) {
+        this.trangThai = trangThai;
+    }
+
     public String getTenDV() {
         return tenDV;
     }
@@ -56,5 +65,7 @@ public class DichVu {
     public void setGiaDV(float giaDV) {
         this.giaDV = giaDV;
     }
+    
+    
 
 }

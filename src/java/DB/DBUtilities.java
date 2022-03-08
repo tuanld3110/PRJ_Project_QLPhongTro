@@ -29,5 +29,4 @@ public class DBUtilities {
         ds.setPortNumber(port);
         return ds.getConnection();
     }
-
 }

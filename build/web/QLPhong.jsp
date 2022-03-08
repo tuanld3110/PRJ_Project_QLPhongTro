@@ -45,7 +45,7 @@
             <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
                 <!-- Sidebar - Brand -->
-                <a class="sidebar-brand d-flex align-items-center justify-content-center" href="Home.jsp">
+                <a class="sidebar-brand d-flex align-items-center justify-content-center" href="QLPhong.jsp">
                     <div class="sidebar-brand-icon rotate-n-15">
                         <i class="fas fa-laugh-wink"></i>
                     </div>
@@ -81,14 +81,13 @@
                     <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
                             <h6 class="collapse-header">Dịch Vụ:</h6>
-                            <a class="collapse-item" href="login.html">Nước và Điện</a>
+                            <a class="collapse-item" href="QLDichVu.jsp">Nước và Điện</a>
                             <div class="collapse-divider"></div>
                             <h6 class="collapse-header">Phòng Trọ:</h6>
-                            <a class="collapse-item" href="404.html">Phòng trọ</a>
-                            <a class="collapse-item" href="blank.html">Tiền thuê phòng</a>
+                            <a class="collapse-item" href=QLPhong.jsp>Phòng trọ</a>
                             <div class="collapse-divider"></div>
                             <h6 class="collapse-header">Khách Hàng:</h6>
-                            <a class="collapse-item" href="404.html">Khách hàng</a>
+                            <a class="collapse-item" href="QLKH.jsp">Khách hàng</a>
                         </div>
                     </div>
                 </li>
@@ -177,7 +176,8 @@
                                             %>
                                             <tr>
                                                 <td><%= p.getIdPhong()%></td>
-                                                <td><%if (p.getIdKH() != 0) {
+                                                <td>
+                                                    <%if (p.getIdKH() != 0) {
                                                     %>
 
                                                     <%
@@ -186,7 +186,7 @@
                                                     %>
 
                                                     <%= kh.getTenKH()%>
-                                                    
+
                                                     <%
                                                         }
                                                     } else {
@@ -196,9 +196,21 @@
                                                         }
                                                     %>
                                                 </td>
-                                                <td><%= p.getThangThue()%></td>
+                                                <td>
+                                                    <%if (p.getThangThue() != 0) {
+                                                    %>
+                                                    <%= p.getThangThue()%>
+                                                    <%
+                                                    } else {
+                                                    %>
+                                                    Trống
+                                                    <%
+                                                        }
+                                                    %>
+                                                </td>
                                                 <td><%= p.getGiaThue()%></td>
-                                                <td><%if (p.getTrangThai() == 1) {
+                                                <td>
+                                                    <%if (p.getTrangThai() == 1) {
                                                     %>
                                                     Được Thuê
                                                     <%
@@ -214,18 +226,18 @@
                                                     %>
                                                 </td>
                                                 <td>
-                                                    <a href="CRUDPhongTroServlet?id=<%= p.getIdPhong()%>&type=del&manage=phongtro" class="btn btn-danger btn-circle" style="margin-left: 24%;">
+                                                        <a onclick="confDel(<%= p.getIdPhong() %>)" class="btn btn-danger btn-circle" style="margin-left: 24%;">
                                                         <i class="fas fa-trash"></i>
                                                     </a>
-                                                    <a href="CRUDPhongTroServlet?id=<%= p.getIdPhong()%>&type=edit&manage=phongtro" class="btn btn-info btn-circle">
+                                                    <a href="CRUD?id=<%= p.getIdPhong()%>&type=edit&manage=phongtro" class="btn btn-info btn-circle">
                                                         <i class="fas fa-pen"></i>
                                                     </a>
                                                 </td>
                                             </tr>
-                                        <%
+                                            <%
+                                                    }
                                                 }
-                                            }
-                                        %>
+                                            %>
                                         </tbody>
                                     </table>
                                 </div>
@@ -280,6 +292,15 @@
         </div>
 
 
+
+        <script>
+            function confDel(id) {
+                if (confirm("Xác nhận xóa phòng ?") == true) {
+                    document.location.href = "CRUD?id="+id+"&type=del&manage=phongtro";
+                }else{
+                }
+            }
+        </script>
 
         <!-- Bootstrap core JavaScript-->
         <script src="vendor/jquery/jquery.min.js"></script>

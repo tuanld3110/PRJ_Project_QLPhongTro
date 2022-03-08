@@ -38,6 +38,11 @@
                 pointer-events: none;
                 touch-action: none;
             }
+            input::-webkit-outer-spin-button,
+            input::-webkit-inner-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
         </style>
 
     </head>
@@ -67,9 +72,9 @@
                     </a>
                     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
-                            <a class="collapse-item" href="buttons.html">Khách Hàng</a>
+                            <a class="collapse-item" href="ThemVaSuaKH.jsp">Khách Hàng</a>
                             <a class="collapse-item" href="cards.html">Dịch Vụ</a>
-                            <a class="collapse-item" href="cards.html">Phòng trọ</a>
+                            <a class="collapse-item" href="ThemVaSuaPhong.jsp">Phòng trọ</a>
                         </div>
                     </div>
                 </li>
@@ -87,14 +92,13 @@
                     <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
                             <h6 class="collapse-header">Dịch Vụ:</h6>
-                            <a class="collapse-item" href="login.html">Nước và Điện</a>
+                            <a class="collapse-item" href="QLDichVu.jsp">Nước và Điện</a>
                             <div class="collapse-divider"></div>
                             <h6 class="collapse-header">Phòng Trọ:</h6>
-                            <a class="collapse-item" href="404.html">Phòng trọ</a>
-                            <a class="collapse-item" href="blank.html">Tiền thuê phòng</a>
+                            <a class="collapse-item" href="QLPhong.jsp">Phòng trọ</a>
                             <div class="collapse-divider"></div>
                             <h6 class="collapse-header">Khách Hàng:</h6>
-                            <a class="collapse-item" href="404.html">Khách hàng</a>
+                            <a class="collapse-item" href="QLKH.jsp">Khách hàng</a>
                         </div>
                     </div>
                 </li>
@@ -162,7 +166,8 @@
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <form action="CRUDPhongTroServlet" method="GET">
+                                    <form action="CRUD" method="GET">
+                                        <input type="hidden" name="manage" value="phongtro">
                                         <%
                                             String type = "";
                                             request.setAttribute("manage", "phongtro");
@@ -172,7 +177,6 @@
                                                 type = "add";
                                             }
                                             if (type == "edit") {
-
                                                 ArrayList<PhongTro> a3 = DAO.Home.getPhongTroByID(Integer.parseInt(request.getAttribute("id").toString()));
                                                 for (PhongTro dtophongtro : a3) {
                                         %>
@@ -190,12 +194,26 @@
                                                 <%
                                                     ArrayList<KhachHang> a2 = DAO.Home.getKhachHang();
                                                     for (KhachHang dto : a2) {
+                                                        if (dto.getIdKH() == dtophongtro.getIdKH()) {
+                                                %>
+                                                <option value="<%= dto.getIdKH()%>" selected><%= dto.getTenKH()%></option>
+                                                <%
+                                                } else {
                                                 %>
                                                 <option value="<%= dto.getIdKH()%>"><%= dto.getTenKH()%></option>
                                                 <%
+                                                        }
                                                     }
+                                                    if (dtophongtro.getIdKH() >= 1) {
                                                 %>
                                                 <option value="0">Trống</option>
+                                                <%
+                                                } else {
+                                                %>
+                                                <option value="0" selected>Trống</option>
+                                                <%
+                                                    }
+                                                %>
                                             </select>
                                         </div>
                                         <h6 class="m-0 font-weight-bold text-primary">Tháng thuê</h6>
@@ -218,6 +236,7 @@
                                         <h6 class="m-0 font-weight-bold text-primary">Người thuê</h6>
                                         <div class="form-outline mb-4">
                                             <select name="idKH" class="form-control form-control-lg"  id="gender">
+                                                <option value="0">Trống</option>
                                                 <%
                                                     ArrayList<KhachHang> a2 = DAO.Home.getKhachHang();
                                                     for (KhachHang dto : a2) {
@@ -231,6 +250,7 @@
                                         <h6 class="m-0 font-weight-bold text-primary">Tháng thuê</h6>
                                         <div class="form-outline mb-4">
                                             <select name="ThangThue" class="form-control form-control-lg"  id="Thangthue">
+                                                <option value="0">Trống</option>
                                                 <option value="1">1</option>
                                                 <option value="2">2</option>
                                                 <option value="3">3</option>
@@ -247,7 +267,7 @@
                                         </div>
                                         <h6 class="m-0 font-weight-bold text-primary">Giá thuê</h6>
                                         <div class="form-outline mb-4">
-                                            <input name="GiaThue" type="number" id="typeEmailX-2" class="form-control form-control-lg" placeholder="Giá Thuê"/>
+                                            <input name="GiaThue" type="number" id="typeEmailX-2" class="form-control form-control-lg" placeholder="Giá Thuê" value="0"/>
                                         </div>
                                         <button class="btn btn-primary btn-lg btn-block" type="submit" name="type" value="add">Thêm</button>
                                         <%

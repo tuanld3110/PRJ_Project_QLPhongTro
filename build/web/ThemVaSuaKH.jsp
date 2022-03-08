@@ -4,6 +4,7 @@
     Author     : crrtt
 --%>
 
+<%@page import="DTO.KhachHang"%>
 <%@page import="javax.xml.ws.Holder"%>
 <%@page import="DTO.PhongTro"%>
 <%@page import="java.util.ArrayList"%>
@@ -32,7 +33,17 @@
 
         <!-- Custom styles for this page -->
         <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
-
+        <style>
+            select[readonly]{
+                pointer-events: none;
+                touch-action: none;
+            }
+            input::-webkit-outer-spin-button,
+            input::-webkit-inner-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
+        </style>
     </head>
 
     <body id="page-top">
@@ -44,7 +55,7 @@
             <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
                 <!-- Sidebar - Brand -->
-                <a class="sidebar-brand d-flex align-items-center justify-content-center" href="Home.jsp">
+                <a class="sidebar-brand d-flex align-items-center justify-content-center" href="QLPhong.jsp">
                     <div class="sidebar-brand-icon rotate-n-15">
                         <i class="fas fa-laugh-wink"></i>
                     </div>
@@ -60,9 +71,9 @@
                     </a>
                     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
-                            <a class="collapse-item" href="buttons.html">Khách Hàng</a>
+                            <a class="collapse-item" href="ThemVaSuaKH.jsp">Khách Hàng</a>
                             <a class="collapse-item" href="cards.html">Dịch Vụ</a>
-                            <a class="collapse-item" href="cards.html">Phòng trọ</a>
+                            <a class="collapse-item" href="ThemVaSuaPhong.jsp">Phòng trọ</a>
                         </div>
                     </div>
                 </li>
@@ -80,14 +91,13 @@
                     <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
                             <h6 class="collapse-header">Dịch Vụ:</h6>
-                            <a class="collapse-item" href="login.html">Nước và Điện</a>
+                            <a class="collapse-item" href="QLDichVu.jsp">Nước và Điện</a>
                             <div class="collapse-divider"></div>
                             <h6 class="collapse-header">Phòng Trọ:</h6>
-                            <a class="collapse-item" href="404.html">Phòng trọ</a>
-                            <a class="collapse-item" href="blank.html">Tiền thuê phòng</a>
+                            <a class="collapse-item" href="QLPhong.jsp">Phòng trọ</a>
                             <div class="collapse-divider"></div>
                             <h6 class="collapse-header">Khách Hàng:</h6>
-                            <a class="collapse-item" href="404.html">Khách hàng</a>
+                            <a class="collapse-item" href="QLKH.jsp">Khách hàng</a>
                         </div>
                     </div>
                 </li>
@@ -155,33 +165,87 @@
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <form action="Login" method="POST">
+                                    <form action="CRUD" method="GET">
+                                        <input type="hidden" name="manage" value="KH">
                                         <%
-                                             String type = "";
+                                            String type = "";
                                             try {
-                                                type = request.getParameter("type");
+                                                type = request.getAttribute("type").toString();
                                             } catch (Exception e) {
                                                 System.out.println(e);
+                                                type = "add";
                                             }
                                             if (type == "edit") {
+                                                ArrayList<KhachHang> dto = DAO.Home.getKhachHangByID(Integer.parseInt(request.getParameter("id").toString()));
+                                                for (KhachHang dtoKH : dto) {
                                         %>
-                                        <h3 class="mb-5">Thay đổi thông tin</h3>
-                                        <%
-                                        } else {
-                                        %>
-                                        <h3 class="mb-5">Thêm Khách Hàng</h3>
+                                        <h6 class="m-0 font-weight-bold text-primary">ID Khách Hàng</h6>
+                                        <div class="form-outline mb-4">
+                                            <input name="id" type="text" id="typeEmailX-2" class="form-control form-control-lg" value="<%= dtoKH.getIdKH()%>" readonly/>
+                                        </div>
+                                        <h6 class="m-0 font-weight-bold text-primary">Tên Khách Hàng</h6>
+                                        <div class="form-outline mb-4">
+                                            <input name="name" type="text" id="typeEmailX-2" class="form-control form-control-lg" placeholder="Tên" value="<%= dtoKH.getTenKH()%>" required/>
+                                        </div>
+                                        <h6 class="m-0 font-weight-bold text-primary">Số điện thoại</h6>
+                                        <div class="form-outline mb-4">
+                                            <input name="phone" type="text" id="typeEmailX-2" class="form-control form-control-lg" placeholder="Số điện thoại" value="<%= dtoKH.getSDT()%>" required pattern="(84|0[3|5|7|8|9])+([0-9]{8})\b" title="Số điện thoại không tồn tại"/>
+                                        </div>
+                                        <h6 class="m-0 font-weight-bold text-primary">Chứng minh nhân dân</h6>
+                                        <div class="form-outline mb-4">
+                                            <input name="cmnd" type="text" id="typeEmailX-2" class="form-control form-control-lg" placeholder="CMND" value="<%= dtoKH.getCMND()%>" required pattern="([0-9][0-9]+[1-9])+([0-9]{9})" title="Chứng minh nhân dân không hợp lệ"/>
+                                        </div>
+                                        <h6 class="m-0 font-weight-bold text-primary">Giới tính</h6>
+                                        <div class="form-outline mb-4">
+                                            <select name="gender" class="form-control form-control-lg"  id="gender">
+                                                <%
+                                                    switch (dtoKH.getGioiTinh()) {
+                                                        case 1:
+                                                %>
+                                                <option value="1" selected>Nam</option>
+                                                <option value="2">Nữ</option>
+                                                <option value="0">Khác</option>
+                                                <%
+                                                        break;
+                                                    case 2:
+                                                %>
+                                                <option value="1">Nam</option>
+                                                <option value="2" selected>Nữ</option>
+                                                <option value="0">Khác</option>
+                                                <%
+                                                        break;
+                                                    default:
+                                                %>
+                                                <option value="1">Nam</option>
+                                                <option value="2" >Nữ</option>
+                                                <option value="0" selected>Khác</option>
+                                                <%
+                                                            break;
+                                                    }
+                                                %>
+                                            </select>
+                                        </div>
+
+                                        <button class="btn btn-primary btn-lg btn-block" type="submit"name="type" value="ApplyEdit">Thay đổi</button>
+                                        <button class="btn btn-primary btn-lg btn-block" type="submit" name="type" value="Cancel">Huỷ</button>
                                         <%
                                             }
+                                        } else {
                                         %>
+
+                                        <h6 class="m-0 font-weight-bold text-primary">Tên Khách Hàng</h6>
                                         <div class="form-outline mb-4">
-                                            <input name="name" type="" id="typeEmailX-2" class="form-control form-control-lg" placeholder="Tên"/>
+                                            <input name="name" type="" id="typeEmailX-2" class="form-control form-control-lg" placeholder="Tên" required/>
                                         </div>
+                                        <h6 class="m-0 font-weight-bold text-primary">Số điện thoại</h6>
                                         <div class="form-outline mb-4">
-                                            <input name="phone" type="number" id="typeEmailX-2" class="form-control form-control-lg" placeholder="Số điện thoại"/>
+                                            <input name="phone" type="number" id="typeEmailX-2" class="form-control form-control-lg" placeholder="Số điện thoại" required pattern="(84|0[3|5|7|8|9])+([0-9]{8})\b" title="Số điện thoại không tồn tại"/>
                                         </div>
+                                        <h6 class="m-0 font-weight-bold text-primary">Chứng minh nhân dân</h6>
                                         <div class="form-outline mb-4">
-                                            <input name="cmnd" type="number" id="typeEmailX-2" class="form-control form-control-lg" placeholder="CMND"/>
+                                            <input name="cmnd" type="number" id="typeEmailX-2" class="form-control form-control-lg" placeholder="CMND" required pattern="([0-9][0-9]+[1-9])+([0-9]{9})" title="Chứng minh nhân dân không hợp lệ"/>
                                         </div>
+                                        <h6 class="m-0 font-weight-bold text-primary">Giới tính</h6>
                                         <div class="form-outline mb-4">
                                             <select name="gender" class="form-control form-control-lg"  id="gender">
                                                 <option value="1">Nam</option>
@@ -189,18 +253,7 @@
                                                 <option value="0">Khác</option>
                                             </select>
                                         </div>
-                                        <div class="form-outline mb-4">
-                                            <input name="password" type="password" id="typePasswordX-2" class="form-control form-control-lg" placeholder="Password" />
-                                        </div>
-                                        <%
-                                        if (type == "edit") {
-                                        %>
-                                         <button class="btn btn-primary btn-lg btn-block" type="submit">Thay đổi</button>
-                                         <button class="btn btn-primary btn-lg btn-block" type="submit">Huỷ</button>
-                                        <%
-                                        } else {
-                                        %>
-                                        <button class="btn btn-primary btn-lg btn-block" type="submit">Thêm</button>
+                                        <button class="btn btn-primary btn-lg btn-block" type="submit"  name="type" value="add">Thêm</button>
                                         <%
                                             }
                                         %>

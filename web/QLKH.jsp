@@ -151,91 +151,59 @@
                         <!-- DataTales Example -->
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
-                                <h6 class="m-0 font-weight-bold text-primary">Quản Lý Thuê Phòng</h6>
+                                <h6 class="m-0 font-weight-bold text-primary">Quản Lý Khách Hàng</h6>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                         <thead>
                                             <tr>
-                                                <th>ID Phòng</th>
-                                                <th>Khách Hàng</th>
-                                                <th>Tháng thuê</th>
-                                                <th>Giá Thuê</th>
-                                                <th>Trạng Thái</th>
+                                                <th>ID Khách hàng</th>
+                                                <th>Tên</th>
+                                                <th>Số Điện Thoại</th>
+                                                <th>CMND</th>
+                                                <th>Giới tính</th>
                                                 <th></th>
                                             </tr>
                                         </thead>
                                         <%
-                                            ArrayList<PhongTro> al = DAO.Home.getPhongTro();
+                                            ArrayList<KhachHang> al = DAO.Home.getKhachHang();
                                         %>
                                         <tbody>
                                             <%
-                                                for (PhongTro p : al) {
-                                                    if (p.getTrangThai() != 0) {
+                                                for (KhachHang p : al) {
                                             %>
                                             <tr>
-                                                <td><%= p.getIdPhong()%></td>
+                                                <td><%= p.getIdKH()%></td>
+                                                <td><%= p.getTenKH()%></td>
+                                                <td><%= p.getSDT()%></td>
+                                                <td><%= p.getCMND()%> </td>
                                                 <td>
-                                                    <%if (p.getIdKH() != 0) {
+                                                    <%if (p.getGioiTinh() == 1) {
                                                     %>
-
+                                                    Nam
                                                     <%
-                                                        ArrayList<KhachHang> a2 = DAO.Home.getKhachHangByID(p.getIdKH());
-                                                        for (KhachHang kh : a2) {
+                                                    } else if (p.getGioiTinh() == 2) {
                                                     %>
-
-                                                    <%= kh.getTenKH()%>
-
+                                                    Nữ
                                                     <%
-                                                        }
                                                     } else {
                                                     %>
-                                                    Trống
+                                                    Khác
                                                     <%
                                                         }
                                                     %>
                                                 </td>
                                                 <td>
-                                                    <%if (p.getThangThue() != 0) {
-                                                    %>
-                                                    <%= p.getThangThue()%>
-                                                    <%
-                                                    } else {
-                                                    %>
-                                                    Trống
-                                                    <%
-                                                        }
-                                                    %>
-                                                </td>
-                                                <td><%= p.getGiaThue()%></td>
-                                                <td>
-                                                    <%if (p.getTrangThai() == 1) {
-                                                    %>
-                                                    Được Thuê
-                                                    <%
-                                                    } else if (p.getTrangThai() == 2) {
-                                                    %>
-                                                    Trống
-                                                    <%
-                                                    } else {
-                                                    %>
-                                                    Đang sửa chữa
-                                                    <%
-                                                        }
-                                                    %>
-                                                </td>
-                                                <td>
-                                                        <a onclick="confDel(<%= p.getIdPhong() %>)" class="btn btn-danger btn-circle" style="margin-left: 24%;">
+                                                    <a onclick="confDel(<%= p.getIdKH()%>)" class="btn btn-danger btn-circle" style="margin-left: 24%;">
                                                         <i class="fas fa-trash"></i>
                                                     </a>
-                                                    <a href="CRUD?id=<%= p.getIdPhong()%>&type=edit&manage=phongtro" class="btn btn-info btn-circle">
+                                                    <a href="CRUD?id=<%= p.getIdKH()%>&type=edit&manage=KH" class="btn btn-info btn-circle">
                                                         <i class="fas fa-pen"></i>
                                                     </a>
                                                 </td>
                                             </tr>
                                             <%
-                                                    }
                                                 }
                                             %>
                                         </tbody>
@@ -295,13 +263,13 @@
 
         <script>
             function confDel(id) {
-                if (confirm("Xác nhận xóa phòng ?") == true) {
-                    document.location.href = "CRUD?id="+id+"&type=del&manage=phongtro";
-                }else{
+                if (confirm("Are you sure you want to delete this column?") == true) {
+                    document.location.href = "CRUD?id=" + id + "&type=del&manage=KH";
+                } else {
+
                 }
             }
         </script>
-
         <!-- Bootstrap core JavaScript-->
         <script src="vendor/jquery/jquery.min.js"></script>
         <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
