@@ -6,8 +6,10 @@
 package Controller;
 
 import DAO.Home;
+import DTO.DichVu;
 import DTO.KhachHang;
 import DTO.PhongTro;
+import DTO.ThuTien;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -66,6 +68,7 @@ public class CRUD extends HttpServlet {
                         case "ApplyEdit":
                             try {
                                 PhongTro dto = new PhongTro();
+                                System.out.println(request.getParameter("ThangThue"));
                                 dto.setIdPhong(Integer.parseInt(request.getParameter("idPhong")));
                                 dto.setIdKH(Integer.parseInt(request.getParameter("idKH")));
                                 dto.setThangThue(Integer.parseInt(request.getParameter("ThangThue")));
@@ -73,7 +76,7 @@ public class CRUD extends HttpServlet {
                                 if (Integer.parseInt(request.getParameter("idKH")) == 0) {
                                     dto.setTrangThai(2);
                                 } else {
-                                    dto.setTrangThai(1);
+                                    dto.setTrangThai(Integer.parseInt(request.getParameter("trangThai")));
                                 }
                                 DAO.Home.UpdatePhongTro(dto);
                                 request.getRequestDispatcher("QLPhong.jsp").forward(request, response);
@@ -87,6 +90,7 @@ public class CRUD extends HttpServlet {
                                 dto.setIdKH(Integer.parseInt(request.getParameter("idKH")));
                                 dto.setThangThue(Integer.parseInt(request.getParameter("ThangThue")));
                                 dto.setGiaThue(Float.parseFloat(request.getParameter("GiaThue")));
+                                dto.setTrangThai(Integer.parseInt(request.getParameter("trangThai")));
                                 DAO.Home.InsertPhongTro(dto);
                                 request.getRequestDispatcher("QLPhong.jsp").forward(request, response);
                             } catch (Exception e) {
@@ -99,7 +103,12 @@ public class CRUD extends HttpServlet {
                     switch (type) {
                         case "del":
                             DAO.Home.DeleteSQL("UPDATE khachHang SET trangThai = 0 WHERE idKH=" + id);
-                            response.sendRedirect("QLKH.jsp");
+                            if (DAO.Home.getPhongTroByIDKH(Integer.parseInt(id)).isEmpty()) {
+                                response.sendRedirect("QLKH.jsp");
+                            } else {
+                                DAO.Home.RemoveOutOfPT(Integer.parseInt(id));
+                                response.sendRedirect("QLKH.jsp");
+                            }
                             break;
                         case "edit":
                             request.setAttribute("type", "edit");
@@ -147,36 +156,91 @@ public class CRUD extends HttpServlet {
                         case "edit":
                             request.setAttribute("type", "edit");
                             request.setAttribute("id", id);
-                            request.getRequestDispatcher("ThemVaSuaKH.jsp").forward(request, response);
+                            request.setAttribute("idTT", request.getParameter("idTT"));
+                            request.getRequestDispatcher("ThemVaSuaDV.jsp").forward(request, response);
                             break;
                         case "Cancel":
                             response.sendRedirect("QLDichVu.jsp");
                             break;
                         case "ApplyEdit":
                             try {
-                                KhachHang dto = new KhachHang();
-                                dto.setIdKH(Integer.parseInt(request.getParameter("id")));
-                                dto.setTenKH(request.getParameter("name"));
-                                dto.setSDT(request.getParameter("phone"));
-                                dto.setCMND(request.getParameter("cmnd"));
-                                dto.setGioiTinh(Integer.parseInt(request.getParameter("gender").toString()));
-                                DAO.Home.UpdateKH(dto);
+                                DichVu dto = new DichVu();
+                                dto.setIdDV(Integer.parseInt(request.getParameter("id")));
+                                dto.setIdThuTien(Integer.parseInt(request.getParameter("idHD")));
+                                dto.setTenDV(request.getParameter("name"));
+                                dto.setGiaDV(Float.parseFloat(request.getParameter("price")));
+                                DAO.Home.UpdateDV(dto);
                                 request.getRequestDispatcher("QLDichVu.jsp").forward(request, response);
                             } catch (Exception e) {
-                                System.out.println(e);
+                                System.out.println(e + "DV");
                             }
                             break;
                         case "add":
                             try {
-                                KhachHang dto = new KhachHang();
-                                dto.setTenKH(request.getParameter("name"));
-                                dto.setSDT(request.getParameter("phone"));
-                                dto.setCMND(request.getParameter("cmnd"));
-                                dto.setGioiTinh(Integer.parseInt(request.getParameter("gender")));
-                                DAO.Home.InsertKH(dto);
+                                DichVu dto = new DichVu();
+                                dto.setIdThuTien(Integer.parseInt(request.getParameter("idHD")));
+                                dto.setTenDV(request.getParameter("name"));
+                                dto.setGiaDV(Float.parseFloat(request.getParameter("price")));
+                                DAO.Home.InsertDV(dto);
                                 request.getRequestDispatcher("QLDichVu.jsp").forward(request, response);
                             } catch (Exception e) {
-                                System.out.println(e);
+                                System.out.println(e + "add");
+                            }
+                            break;
+                    }
+                    break;
+                case "TT":
+                    switch (type) {
+                        case "del":
+                            DAO.Home.DeleteSQL("UPDATE thuTien SET trangThai = 0 WHERE idThuTien=" + id);
+                            response.sendRedirect("QLThuTien.jsp");
+                            break;
+                        case "edit":
+                            request.setAttribute("type", "edit");
+                            request.setAttribute("id", id);
+                            request.setAttribute("idPhong", request.getParameter("idPhong"));
+                            request.getRequestDispatcher("ThemVaSuaTT.jsp").forward(request, response);
+                            break;
+                        case "Cancel":
+                            response.sendRedirect("QLThuTien.jsp");
+                            break;
+                        case "ApplyEdit":
+                            try {
+                                String idTmp = request.getParameter("idPhong");
+                                String[] arrID = idTmp.split("\\.");
+                                ThuTien dto = new ThuTien();
+                                dto.setIdThuTien(Integer.parseInt(request.getParameter("idTT")));
+                                dto.setIdPhong(Integer.parseInt(arrID[0]));
+                                dto.setSoDien(Integer.parseInt(request.getParameter("SoDien")));
+                                dto.setSoNuoc(Integer.parseInt(request.getParameter("SoNuoc")));
+                                dto.setTrangThai(Integer.parseInt(request.getParameter("TrangThai")));
+                                dto.setTongTien(Calculator.CalSumOfMoney(Integer.parseInt(request.getParameter("ThangThue")), Integer.parseInt(request.getParameter("idTT")), Integer.parseInt(arrID[0]), dto.getSoDien(), dto.getSoNuoc()));
+                                Home.UpdateTT(dto);
+                                response.sendRedirect("QLThuTien.jsp");
+                            } catch (IOException | NumberFormatException | SQLException e) {
+                                System.out.println(e + " DV");
+                            }
+                            break;
+                        case "add":
+                            try {
+                                int idTT = 0;
+                                String idTmp = request.getParameter("idPhong");
+                                String[] arrID = idTmp.split("\\.");
+                                ThuTien dto = new ThuTien();
+                                try {
+                                    idTT = Integer.parseInt(request.getParameter("idTT"));
+                                } catch (Exception e) {
+                                    idTT = 0;
+                                }
+                                dto.setIdPhong(Integer.parseInt(arrID[0]));
+                                dto.setSoDien(Integer.parseInt(request.getParameter("SoDien")));
+                                dto.setSoNuoc(Integer.parseInt(request.getParameter("SoNuoc")));
+                                dto.setTrangThai(Integer.parseInt(request.getParameter("TrangThai")));
+                                dto.setTongTien(Calculator.CalSumOfMoney(Integer.parseInt(request.getParameter("ThangThue")), idTT, Integer.parseInt(arrID[0]), dto.getSoDien(), dto.getSoNuoc()));
+                                Home.InsertThuTien(dto);
+                                response.sendRedirect("QLThuTien.jsp");
+                            } catch (Exception e) {
+                                System.out.println(e + " add");
                             }
                             break;
                     }
@@ -217,7 +281,9 @@ public class CRUD extends HttpServlet {
             throws ServletException, IOException {
         try {
             processRequest(request, response);
+
         } catch (SQLException ex) {
+            System.out.println(ex);
             Logger.getLogger(CRUD.class.getName()).log(Level.SEVERE, null, ex);
         }
 

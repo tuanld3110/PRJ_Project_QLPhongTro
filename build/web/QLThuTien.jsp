@@ -4,6 +4,7 @@
     Author     : crrtt
 --%>
 
+<%@page import="DTO.ThuTien"%>
 <%@page import="DTO.DichVu"%>
 <%@page import="DTO.KhachHang"%>
 <%@page import="javax.xml.ws.Holder"%>
@@ -154,38 +155,55 @@
                         <!-- DataTales Example -->
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
-                                <h6 class="m-0 font-weight-bold text-primary">Quản Lý Dịch Vụ</h6>
+                                <h6 class="m-0 font-weight-bold text-primary">Quản Lý Thu Tiền</h6>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                         <thead>
                                             <tr>
-                                                <th>ID Dịch Vụ</th>
                                                 <th>ID Thu Tiền</th>
-                                                <th>Tên Dịch Vụ</th>
-                                                <th>Giá Dịch Vụ</th>
+                                                <th>ID Phòng</th>
+                                                <th>Tháng Thuê</th>
+                                                <th>Tổng Tiền</th>
+                                                <th>Số Điện</th>
+                                                <th>Số Nước</th>
+                                                <th>Trạng thái</th>
                                                 <th></th>
                                             </tr>
                                         </thead>
                                         <%
-                                            ArrayList<DichVu> al = DAO.Home.getDichVu();
+                                            ArrayList<ThuTien> al = DAO.Home.getThuTien();
                                         %>
                                         <tbody>
                                             <%
-                                                for (DichVu p : al) {
-                                                    if (p.getTrangThai() == 1) {
+                                                for (ThuTien p : al) {
+                                                    int ThangThue = DAO.Home.getThangThueByID(p.getIdPhong());
+                                                    if (p.getTrangThai() != 0) {
                                             %>
                                             <tr>
-                                                <td><%= p.getIdDV()%></td>
                                                 <td><%= p.getIdThuTien()%></td>
-                                                <td><%= p.getTenDV()%></td>
-                                                <td><%= p.getGiaDV()%> </td>
+                                                <td><%= p.getIdPhong()%></td>                                        
+                                                <td><%= ThangThue%></td>
+                                                <td><%= String.format("%.0f", p.getTongTien())%></td>
+                                                <td><%= p.getSoDien()%></td>
+                                                <td><%= p.getSoNuoc()%></td>
+                                                <%
+                                                    if (p.getTrangThai() == 1) {
+                                                %>
+                                                <td>Đã thanh toán</td>
+                                                <%
+                                                } else if (p.getTrangThai() == 2) {
+                                                %>
+                                                <td>Chưa thanh toán</td>
+                                                <%
+                                                    }
+                                                %>
                                                 <td>
-                                                    <a onclick="confDel(<%= p.getIdDV()%>)" class="btn btn-danger btn-circle" style="margin-left: 24%;">
+                                                    <a onclick="confDel(<%= p.getIdThuTien()%>)" class="btn btn-danger btn-circle" style="margin-left: 15%;">
                                                         <i class="fas fa-trash"></i>
                                                     </a>
-                                                    <a href="CRUD?id=<%= p.getIdDV()%>&type=edit&manage=DV&idTT=<%= p.getIdThuTien() %>" class="btn btn-info btn-circle">
+                                                    <a href="CRUD?id=<%= p.getIdThuTien()%>&type=edit&manage=TT&idPhong=<%= p.getIdPhong()%>" class="btn btn-info btn-circle">
                                                         <i class="fas fa-pen"></i>
                                                     </a>
                                                 </td>
@@ -252,7 +270,7 @@
         <script>
             function confDel(id) {
                 if (confirm("Are you sure you want to delete this column?") == true) {
-                    document.location.href = "CRUD?id=" + id + "&type=del&manage=DV";
+                    document.location.href = "CRUD?id=" + id + "&type=del&manage=TT";
                 } else {
 
                 }

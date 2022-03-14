@@ -4,6 +4,7 @@
     Author     : crrtt
 --%>
 
+<%@page import="DTO.ThuTien"%>
 <%@page import="DTO.DichVu"%>
 <%@page import="DTO.KhachHang"%>
 <%@page import="javax.xml.ws.Holder"%>
@@ -34,7 +35,17 @@
 
         <!-- Custom styles for this page -->
         <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
-
+        <style>
+            select[readonly]{
+                pointer-events: none;
+                touch-action: none;
+            }
+            input::-webkit-outer-spin-button,
+            input::-webkit-inner-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
+        </style>
     </head>
 
     <body id="page-top">
@@ -86,7 +97,7 @@
                             <a class="collapse-item" href="QLDichVu.jsp">Nước và Điện</a>
                             <div class="collapse-divider"></div>
                             <h6 class="collapse-header">Phòng Trọ:</h6>
-                            <a class="collapse-item" href=QLPhong.jsp>Phòng trọ</a>
+                            <a class="collapse-item" href="QLPhong.jsp">Phòng trọ</a>
                             <a class="collapse-item" href="QLThuTien.jsp">Tiền Thuê</a>
                             <div class="collapse-divider"></div>
                             <h6 class="collapse-header">Khách Hàng:</h6>
@@ -158,44 +169,103 @@
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                        <thead>
-                                            <tr>
-                                                <th>ID Dịch Vụ</th>
-                                                <th>ID Thu Tiền</th>
-                                                <th>Tên Dịch Vụ</th>
-                                                <th>Giá Dịch Vụ</th>
-                                                <th></th>
-                                            </tr>
-                                        </thead>
+                                    <form action="CRUD" method="GET">
+                                        <input type="hidden" name="manage" value="DV">
                                         <%
-                                            ArrayList<DichVu> al = DAO.Home.getDichVu();
+                                            String type = "";
+                                            try {
+                                                type = request.getAttribute("type").toString();
+                                            } catch (Exception e) {
+                                                System.out.println(e);
+                                                type = "add";
+                                            }
+                                            if (type == "edit") {
+                                                ArrayList<DichVu> dto = DAO.Home.getDichVuByID(Integer.parseInt(request.getParameter("id").toString()));
+                                                for (DichVu dtoDV : dto) {
                                         %>
-                                        <tbody>
-                                            <%
-                                                for (DichVu p : al) {
-                                                    if (p.getTrangThai() == 1) {
-                                            %>
-                                            <tr>
-                                                <td><%= p.getIdDV()%></td>
-                                                <td><%= p.getIdThuTien()%></td>
-                                                <td><%= p.getTenDV()%></td>
-                                                <td><%= p.getGiaDV()%> </td>
-                                                <td>
-                                                    <a onclick="confDel(<%= p.getIdDV()%>)" class="btn btn-danger btn-circle" style="margin-left: 24%;">
-                                                        <i class="fas fa-trash"></i>
-                                                    </a>
-                                                    <a href="CRUD?id=<%= p.getIdDV()%>&type=edit&manage=DV&idTT=<%= p.getIdThuTien() %>" class="btn btn-info btn-circle">
-                                                        <i class="fas fa-pen"></i>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                            <%
+                                        <h3 class="mb-5">Thay đổi thông tin</h3>
+                                        <h6 class="m-0 font-weight-bold text-primary">ID Dịch Vụ</h6>
+                                        <div class="form-outline mb-4">
+                                            <input name="id" type="text" id="typeEmailX-2" class="form-control form-control-lg" value="<%= dtoDV.getIdDV()%>" readonly/>
+                                        </div>
+                                        <h6 class="m-0 font-weight-bold text-primary">ID Hoá Đơn</h6>
+                                        <div class="form-outline mb-4">
+                                            <select name="idHD" class="form-control form-control-lg"  id="gender">
+                                                <%
+                                                    ArrayList<ThuTien> arr = DAO.Home.getThuTien();
+                                                    for (ThuTien dtoEdit : arr) {
+                                                        if (dtoEdit.getIdThuTien() == Integer.parseInt(request.getParameter("idTT"))) {
+                                                %>
+                                                <option value="<%= dtoEdit.getIdThuTien()%>" selected><%= dtoEdit.getIdThuTien()%></option>
+                                                <%
+                                                } else {
+
+                                                %>
+                                                <option value="<%= dtoEdit.getIdThuTien()%>"><%= dtoEdit.getIdThuTien()%></option>
+                                                <%
+                                                        }
                                                     }
+                                                %>
+                                            </select>
+                                        </div>
+                                        <h6 class="m-0 font-weight-bold text-primary">Tên Dịch Vụ</h6>
+                                        <div class="form-outline mb-4">
+                                            <select name="name" class="form-control form-control-lg"  id="gender">
+                                                <%
+                                                    if (dtoDV.getTenDV().equals("Điện")) {
+                                                %>
+                                                <option value="Điện" selected>Điện</option>
+                                                <option value="Nước">Nước</option>
+                                                <%
+                                                } else {
+
+                                                %>
+                                                <option value="Điện">Điện</option>
+                                                <option value="Nước" selected>Nước</option>
+                                                <%
                                                 }
-                                            %>
-                                        </tbody>
-                                    </table>
+                                                %>
+                                            </select>
+                                        </div>
+                                        <h6 class="m-0 font-weight-bold text-primary">Giá Dịch Vụ</h6>
+                                        <div class="form-outline mb-4">
+                                            <input name="price" type="number" id="typeEmailX-2" class="form-control form-control-lg" placeholder="Giá Dịch Vụ" value="<%= dtoDV.getGiaDV()%>" required pattern="^[1-9]\d*$" title="Giá Tiền phải là số dương"/>
+                                        </div>
+
+                                        <button class="btn btn-primary btn-lg btn-block" type="submit"name="type" value="ApplyEdit">Thay đổi</button>
+                                        <button class="btn btn-primary btn-lg btn-block" type="submit" name="type" value="Cancel">Huỷ</button>
+                                        <%
+                                            }
+                                        } else {
+                                        %>
+                                        <h3 class="mb-5">Thêm Dịch Vụ</h3>
+                                        <h6 class="m-0 font-weight-bold text-primary">ID Hoá Đơn</h6>
+                                        <div class="form-outline mb-4">
+                                            <select name="idHD" class="form-control form-control-lg"  id="gender">
+                                                <%
+                                                    ArrayList<ThuTien> arr = DAO.Home.getThuTien();
+                                                    for (ThuTien dto : arr) {
+                                                %>
+                                                <option value="<%= dto.getIdThuTien()%>"><%= dto.getIdThuTien()%></option>
+                                                <%
+                                                    }
+                                                %>
+                                            </select>
+                                        </div>
+                                        <h6 class="m-0 font-weight-bold text-primary">Tên Dịch Vụ</h6>
+                                        <div class="form-outline mb-4">
+                                            <input name="name" type="text" id="typeEmailX-2" class="form-control form-control-lg" placeholder="Tên Dịch Vụ" required title="Tên không hợp lệ"/>
+                                        </div>
+                                        <h6 class="m-0 font-weight-bold text-primary">Giá Dịch Vụ</h6>
+                                        <div class="form-outline mb-4">
+                                            <input name="price" type="text" id="typeEmailX-2" class="form-control form-control-lg" placeholder="Giá Dịch Vụ" required required pattern="^[1-9]\d*$" title="Giá Tiền phải là số dương"/>
+                                        </div>
+
+                                        <button class="btn btn-primary btn-lg btn-block" type="submit"  name="type" value="add">Thêm</button>
+                                        <%
+                                            }
+                                        %>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -249,15 +319,6 @@
 
 
 
-        <script>
-            function confDel(id) {
-                if (confirm("Are you sure you want to delete this column?") == true) {
-                    document.location.href = "CRUD?id=" + id + "&type=del&manage=DV";
-                } else {
-
-                }
-            }
-        </script>
         <!-- Bootstrap core JavaScript-->
         <script src="vendor/jquery/jquery.min.js"></script>
         <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>

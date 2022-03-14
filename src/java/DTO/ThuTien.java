@@ -11,18 +11,20 @@ package DTO;
  */
 public class ThuTien {
 
-    int idThuTien, idPhong, thangThue, soDien, soNuoc;
+    int idThuTien, idPhong, thangThue, soDien, soNuoc,trangThai,lanCuoi;
     float tongTien;
 
     public ThuTien() {
     }
 
-    public ThuTien(int idThuTien, int idPhong, int thangThue, int soDien, int soNuoc, float tongTien) {
+    public ThuTien(int idThuTien, int idPhong, int thangThue, int soDien, int soNuoc, int trangThai, int lanCuoi, float tongTien) {
         this.idThuTien = idThuTien;
         this.idPhong = idPhong;
         this.thangThue = thangThue;
         this.soDien = soDien;
         this.soNuoc = soNuoc;
+        this.trangThai = trangThai;
+        this.lanCuoi = lanCuoi;
         this.tongTien = tongTien;
     }
 
@@ -66,6 +68,22 @@ public class ThuTien {
         this.soNuoc = soNuoc;
     }
 
+    public int getTrangThai() {
+        return trangThai;
+    }
+
+    public void setTrangThai(int trangThai) {
+        this.trangThai = trangThai;
+    }
+
+    public int getLanCuoi() {
+        return lanCuoi;
+    }
+
+    public void setLanCuoi(int lanCuoi) {
+        this.lanCuoi = lanCuoi;
+    }
+
     public float getTongTien() {
         return tongTien;
     }
@@ -74,4 +92,5 @@ public class ThuTien {
         this.tongTien = tongTien;
     }
 
+    
 }

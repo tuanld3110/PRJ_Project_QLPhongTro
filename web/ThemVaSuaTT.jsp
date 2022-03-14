@@ -4,6 +4,8 @@
     Author     : crrtt
 --%>
 
+<%@page import="DTO.ThuTien"%>
+<%@page import="DTO.DichVu"%>
 <%@page import="DTO.KhachHang"%>
 <%@page import="javax.xml.ws.Holder"%>
 <%@page import="DTO.PhongTro"%>
@@ -59,7 +61,7 @@
                     <div class="sidebar-brand-icon rotate-n-15">
                         <i class="fas fa-laugh-wink"></i>
                     </div>
-                    <div class="sidebar-brand-text mx-3">Quản Lý Khách Hàng</div>
+                    <div class="sidebar-brand-text mx-3">Quản Lý Phòng Trọ</div>
                 </a>
 
                 <!-- Nav Item - Pages Collapse Menu -->
@@ -163,12 +165,12 @@
                         <!-- DataTales Example -->
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
-                                <h6 class="m-0 font-weight-bold text-primary">Quản Lý Khách Hàng</h6>
+                                <h6 class="m-0 font-weight-bold text-primary">Quản Lý Thu Tiền</h6>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <form action="CRUD" method="GET">
-                                        <input type="hidden" name="manage" value="KH">
+                                    <form action="CRUD" method="POST">
+                                        <input type="hidden" name="manage" value="TT">
                                         <%
                                             String type = "";
                                             try {
@@ -178,87 +180,114 @@
                                                 type = "add";
                                             }
                                             if (type == "edit") {
-                                                ArrayList<KhachHang> dto = DAO.Home.getKhachHangByID(Integer.parseInt(request.getParameter("id").toString()));
-                                                for (KhachHang dtoKH : dto) {
+                                                ThuTien dtoTT = DAO.Home.getThuTienByID(Integer.parseInt(request.getParameter("id").toString()));
+
+                                                int ThangThue = DAO.Home.getThangThueByID(dtoTT.getIdPhong());
                                         %>
                                         <h3 class="mb-5">Thay đổi thông tin</h3>
-                                        <h6 class="m-0 font-weight-bold text-primary">ID Khách Hàng</h6>
+                                        <h6 class="m-0 font-weight-bold text-primary">ID Hoá Đơn</h6>
                                         <div class="form-outline mb-4">
-                                            <input name="id" type="text" id="typeEmailX-2" class="form-control form-control-lg" value="<%= dtoKH.getIdKH()%>" readonly/>
+                                            <input name="idTT" type="text" id="typeEmailX-2" class="form-control form-control-lg" value="<%= dtoTT.getIdThuTien()%>" readonly/>
                                         </div>
-                                        <h6 class="m-0 font-weight-bold text-primary">Tên Khách Hàng</h6>
+                                        <h6 class="m-0 font-weight-bold text-primary">ID Phòng</h6>
                                         <div class="form-outline mb-4">
-                                            <input name="name" type="text" id="typeEmailX-2" class="form-control form-control-lg" placeholder="Tên" value="<%= dtoKH.getTenKH()%>" required title="Tên không hợp lệ"/>
-                                        </div>
-                                        <h6 class="m-0 font-weight-bold text-primary">Số điện thoại</h6>
-                                        <div class="form-outline mb-4">
-                                            <input name="phone" type="text" id="typeEmailX-2" class="form-control form-control-lg" placeholder="Số điện thoại" value="<%= dtoKH.getSDT()%>" required pattern="(84|0[3|5|7|8|9])+([0-9]{8})\b" title="Số điện thoại không tồn tại"/>
-                                        </div>
-                                        <h6 class="m-0 font-weight-bold text-primary">Chứng minh nhân dân</h6>
-                                        <div class="form-outline mb-4">
-                                            <input name="cmnd" type="text" id="typeEmailX-2" class="form-control form-control-lg" placeholder="CMND" value="<%= dtoKH.getCMND()%>" required pattern="([0-9][0-9]+[1-9])+([0-9]{9})" title="Chứng minh nhân dân không hợp lệ"/>
-                                        </div>
-                                        <h6 class="m-0 font-weight-bold text-primary">Giới tính</h6>
-                                        <div class="form-outline mb-4">
-                                            <select name="gender" class="form-control form-control-lg"  id="gender">
+                                            <select name="idPhong" class="form-control form-control-lg"  id="gender" onchange="myFunction(this.value)">
                                                 <%
-                                                    switch (dtoKH.getGioiTinh()) {
-                                                        case 1:
+                                                    ArrayList<PhongTro> arr = DAO.Home.getPhongTro();
+                                                    for (PhongTro dtoEdit : arr) {
+                                                        if (dtoEdit.getIdPhong() == Integer.parseInt(request.getParameter("idPhong"))) {
                                                 %>
-                                                <option value="1" selected>Nam</option>
-                                                <option value="2">Nữ</option>
-                                                <option value="0">Khác</option>
+                                                <option value="<%= dtoEdit.getIdPhong()%>.<%= dtoEdit.getThangThue()%>" selected><%= dtoEdit.getIdPhong()%></option>
                                                 <%
-                                                        break;
-                                                    case 2:
+                                                } else if (dtoEdit.getTrangThai() == 1) {
+
                                                 %>
-                                                <option value="1">Nam</option>
-                                                <option value="2" selected>Nữ</option>
-                                                <option value="0">Khác</option>
+                                                <option value="<%= dtoEdit.getIdPhong()%>.<%= dtoEdit.getThangThue()%>"><%= dtoEdit.getIdPhong()%></option>
                                                 <%
-                                                        break;
-                                                    default:
+                                                        }
+                                                    }
+
                                                 %>
-                                                <option value="1">Nam</option>
-                                                <option value="2" >Nữ</option>
-                                                <option value="0" selected>Khác</option>
+                                            </select>
+                                        </div>
+                                        <h6 class="m-0 font-weight-bold text-primary">Tháng Thuê</h6>
+                                        <div class="form-outline mb-4">
+                                            <input name="ThangThue" type="number" id="ThangThue" class="form-control form-control-lg" value="<%= ThangThue%>" readonly/>
+                                        </div>
+                                        <h6 class="m-0 font-weight-bold text-primary">Tổng Tiền</h6>
+                                        <div class="form-outline mb-4">
+                                            <input name="TongTien" type="number" id="TongTien" class="form-control form-control-lg" value="<%= dtoTT.getTongTien()%>" readonly/>
+                                        </div>
+                                        <h6 class="m-0 font-weight-bold text-primary">Số Điện</h6>
+                                        <div class="form-outline mb-4">
+                                            <input name="SoDien" type="number" id="typeEmailX-2" class="form-control form-control-lg" placeholder="Số Điện" value="<%= dtoTT.getSoDien()%>" required pattern="^[1-9]\d*$" title="Số Điện phải là số dương"/>
+                                        </div>
+                                        <h6 class="m-0 font-weight-bold text-primary">Số Nước</h6>
+                                        <div class="form-outline mb-4">
+                                            <input name="SoNuoc" type="number" id="typeEmailX-2" class="form-control form-control-lg" placeholder="Số Nước" value="<%= dtoTT.getSoNuoc()%>" required pattern="^[1-9]\d*$" title="Số Nước phải là số dương"/>
+                                        </div>
+                                        <h6 class="m-0 font-weight-bold text-primary">Trạng Thái</h6>
+                                        <div class="form-outline mb-4">
+                                            <select name="TrangThai" class="form-control form-control-lg"  id="gender">
                                                 <%
-                                                            break;
+                                                    if (dtoTT.getTrangThai() == 1) {
+                                                %>
+                                                <option value="1" selected>Đã thanh toán</option>
+                                                <option value="2">Chưa Thanh Toán</option>
+                                                <%
+                                                } else {
+                                                %>
+                                                <option value="1">Đã thanh toán</option>
+                                                <option value="2" selected="">Chưa Thanh Toán</option>
+                                                <%
                                                     }
                                                 %>
                                             </select>
                                         </div>
-
-                                        <button class="btn btn-primary btn-lg btn-block" type="submit"name="type" value="ApplyEdit">Thay đổi</button>
+                                        <button class="btn btn-primary btn-lg btn-block" type="submit" name="type" value="ApplyEdit">Thay đổi</button>
                                         <button class="btn btn-primary btn-lg btn-block" type="submit" name="type" value="Cancel">Huỷ</button>
                                         <%
-                                            }
                                         } else {
                                         %>
-                                        <h3 class="mb-5">Thêm Khách Hàng</h3>
-                                        <h6 class="m-0 font-weight-bold text-primary">Tên Khách Hàng</h6>
+                                        <h3 class="mb-5">Thêm Hóa Đơn</h3>
+                                        <h6 class="m-0 font-weight-bold text-primary">ID Phòng</h6>
                                         <div class="form-outline mb-4">
-                                            <input name="name" type="" id="typeEmailX-2" class="form-control form-control-lg" placeholder="Tên" required title="Tên không hợp lệ"/>
-                                        </div>
-                                        <h6 class="m-0 font-weight-bold text-primary">Số điện thoại</h6>
-                                        <div class="form-outline mb-4">
-                                            <input name="phone" type="text" id="typeEmailX-2" class="form-control form-control-lg" placeholder="Số điện thoại" required pattern="(84|0[3|5|7|8|9])+([0-9]{8})\b" title="Số điện thoại không tồn tại"/>
-                                        </div>
-                                        <h6 class="m-0 font-weight-bold text-primary">Chứng minh nhân dân</h6>
-                                        <div class="form-outline mb-4">
-                                            <input name="cmnd" type="text" id="typeEmailX-2" class="form-control form-control-lg" placeholder="CMND" required pattern="([0-9][0-9]+[1-9])+([0-9]{9})" title="Chứng minh nhân dân không hợp lệ"/>
-                                        </div>
-                                        <h6 class="m-0 font-weight-bold text-primary">Giới tính</h6>
-                                        <div class="form-outline mb-4">
-                                            <select name="gender" class="form-control form-control-lg"  id="gender">
-                                                <option value="1">Nam</option>
-                                                <option value="2">Nữ</option>
-                                                <option value="0">Khác</option>
+                                            <select name="idPhong" class="form-control form-control-lg"  id="gender" onchange="myFunction(this.value)">
+                                                <%
+                                                    ArrayList<PhongTro> arr = DAO.Home.getPhongTro();
+                                                    for (PhongTro dtoEdit : arr) {
+                                                        if (dtoEdit.getTrangThai() == 1) {
+                                                %>
+                                                <option value="<%= dtoEdit.getIdPhong()%>.<%= dtoEdit.getThangThue()%>"><%= dtoEdit.getIdPhong()%></option>
+                                                <%
+                                                        }
+                                                    }
+
+                                                %>
                                             </select>
                                         </div>
+                                        <h6 class="m-0 font-weight-bold text-primary">Tháng Thuê</h6>
+                                        <div class="form-outline mb-4">
+                                            <input name="ThangThue" type="text" id="ThangThue" class="form-control form-control-lg" readonly/>
+                                        </div>
+                                        <h6 class="m-0 font-weight-bold text-primary">Số Điện</h6>
+                                        <div class="form-outline mb-4">
+                                            <input name="SoDien" type="number" id="typeEmailX-2" class="form-control form-control-lg" placeholder="Số Điện" required pattern="^[0-9]\d*$" title="Số Điện phải là số dương"/>
+                                        </div>
+                                        <h6 class="m-0 font-weight-bold text-primary">Số Nước</h6>
+                                        <div class="form-outline mb-4">
+                                            <input name="SoNuoc" type="number" id="typeEmailX-2" class="form-control form-control-lg" placeholder="Số Nước" required pattern="^[0-9]\d*$" title="Số Nước phải là số dương"/>
+                                        </div>
+                                        <h6 class="m-0 font-weight-bold text-primary">Trạng Thái</h6>
+                                        <div class="form-outline mb-4">
+                                            <select name="TrangThai" class="form-control form-control-lg"  id="TrangThai">
+                                                <option value="1">Đã thanh toán</option>
+                                                <option value="2" selected>Chưa Thanh Toán</option>
+                                            </select>
+                                        </div>
+
                                         <button class="btn btn-primary btn-lg btn-block" type="submit"  name="type" value="add">Thêm</button>
-                                        <%
-                                            }
+                                        <%                                            }
                                         %>
                                     </form>
                                 </div>
@@ -313,6 +342,14 @@
         </div>
 
 
+        <script>
+            function myFunction(idPhong) {
+                let string = String(idPhong);
+                const arr = string.split(".");
+                let thangthue = arr[1];
+                document.getElementById("ThangThue").value = thangthue;
+            }
+        </script>
 
         <!-- Bootstrap core JavaScript-->
         <script src="vendor/jquery/jquery.min.js"></script>

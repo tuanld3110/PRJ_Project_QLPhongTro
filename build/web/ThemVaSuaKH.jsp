@@ -59,7 +59,7 @@
                     <div class="sidebar-brand-icon rotate-n-15">
                         <i class="fas fa-laugh-wink"></i>
                     </div>
-                    <div class="sidebar-brand-text mx-3">Quản Lý Phòng Trọ</div>
+                    <div class="sidebar-brand-text mx-3">Quản Lý Khách Hàng</div>
                 </a>
 
                 <!-- Nav Item - Pages Collapse Menu -->
@@ -72,8 +72,9 @@
                     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
                             <a class="collapse-item" href="ThemVaSuaKH.jsp">Khách Hàng</a>
-                            <a class="collapse-item" href="cards.html">Dịch Vụ</a>
-                            <a class="collapse-item" href="ThemVaSuaPhong.jsp">Phòng trọ</a>
+                            <a class="collapse-item" href="ThemVaSuaDV.jsp">Dịch Vụ</a>
+                            <a class="collapse-item" href="ThemVaSuaPhong.jsp">Phòng Trọ</a>
+                            <a class="collapse-item" href="ThemVaSuaTT.jsp">Hoá Đơn</a>
                         </div>
                     </div>
                 </li>
@@ -95,6 +96,7 @@
                             <div class="collapse-divider"></div>
                             <h6 class="collapse-header">Phòng Trọ:</h6>
                             <a class="collapse-item" href="QLPhong.jsp">Phòng trọ</a>
+                            <a class="collapse-item" href="QLThuTien.jsp">Tiền Thuê</a>
                             <div class="collapse-divider"></div>
                             <h6 class="collapse-header">Khách Hàng:</h6>
                             <a class="collapse-item" href="QLKH.jsp">Khách hàng</a>
@@ -179,13 +181,14 @@
                                                 ArrayList<KhachHang> dto = DAO.Home.getKhachHangByID(Integer.parseInt(request.getParameter("id").toString()));
                                                 for (KhachHang dtoKH : dto) {
                                         %>
+                                        <h3 class="mb-5">Thay đổi thông tin</h3>
                                         <h6 class="m-0 font-weight-bold text-primary">ID Khách Hàng</h6>
                                         <div class="form-outline mb-4">
                                             <input name="id" type="text" id="typeEmailX-2" class="form-control form-control-lg" value="<%= dtoKH.getIdKH()%>" readonly/>
                                         </div>
                                         <h6 class="m-0 font-weight-bold text-primary">Tên Khách Hàng</h6>
                                         <div class="form-outline mb-4">
-                                            <input name="name" type="text" id="typeEmailX-2" class="form-control form-control-lg" placeholder="Tên" value="<%= dtoKH.getTenKH()%>" required/>
+                                            <input name="name" type="text" id="typeEmailX-2" class="form-control form-control-lg" placeholder="Tên" value="<%= dtoKH.getTenKH()%>" required title="Tên không hợp lệ"/>
                                         </div>
                                         <h6 class="m-0 font-weight-bold text-primary">Số điện thoại</h6>
                                         <div class="form-outline mb-4">
@@ -232,18 +235,18 @@
                                             }
                                         } else {
                                         %>
-
+                                        <h3 class="mb-5">Thêm Khách Hàng</h3>
                                         <h6 class="m-0 font-weight-bold text-primary">Tên Khách Hàng</h6>
                                         <div class="form-outline mb-4">
-                                            <input name="name" type="" id="typeEmailX-2" class="form-control form-control-lg" placeholder="Tên" required/>
+                                            <input name="name" type="" id="typeEmailX-2" class="form-control form-control-lg" placeholder="Tên" required title="Tên không hợp lệ"/>
                                         </div>
                                         <h6 class="m-0 font-weight-bold text-primary">Số điện thoại</h6>
                                         <div class="form-outline mb-4">
-                                            <input name="phone" type="number" id="typeEmailX-2" class="form-control form-control-lg" placeholder="Số điện thoại" required pattern="(84|0[3|5|7|8|9])+([0-9]{8})\b" title="Số điện thoại không tồn tại"/>
+                                            <input name="phone" type="text" id="typeEmailX-2" class="form-control form-control-lg" placeholder="Số điện thoại" required pattern="(84|0[3|5|7|8|9])+([0-9]{8})\b" title="Số điện thoại không tồn tại"/>
                                         </div>
                                         <h6 class="m-0 font-weight-bold text-primary">Chứng minh nhân dân</h6>
                                         <div class="form-outline mb-4">
-                                            <input name="cmnd" type="number" id="typeEmailX-2" class="form-control form-control-lg" placeholder="CMND" required pattern="([0-9][0-9]+[1-9])+([0-9]{9})" title="Chứng minh nhân dân không hợp lệ"/>
+                                            <input name="cmnd" type="text" id="typeEmailX-2" class="form-control form-control-lg" placeholder="CMND" required pattern="([0-9][0-9]+[1-9])+([0-9]{9})" title="Chứng minh nhân dân không hợp lệ"/>
                                         </div>
                                         <h6 class="m-0 font-weight-bold text-primary">Giới tính</h6>
                                         <div class="form-outline mb-4">

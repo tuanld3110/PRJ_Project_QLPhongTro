@@ -62,8 +62,9 @@
                     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
                             <a class="collapse-item" href="ThemVaSuaKH.jsp">Khách Hàng</a>
-                            <a class="collapse-item" href="cards.html">Dịch Vụ</a>
-                            <a class="collapse-item" href="ThemVaSuaPhong.jsp">Phòng trọ</a>
+                            <a class="collapse-item" href="ThemVaSuaDV.jsp">Dịch Vụ</a>
+                            <a class="collapse-item" href="ThemVaSuaPhong.jsp">Phòng Trọ</a>
+                            <a class="collapse-item" href="ThemVaSuaTT.jsp">Hoá Đơn</a>
                         </div>
                     </div>
                 </li>
@@ -85,6 +86,7 @@
                             <div class="collapse-divider"></div>
                             <h6 class="collapse-header">Phòng Trọ:</h6>
                             <a class="collapse-item" href=QLPhong.jsp>Phòng trọ</a>
+                            <a class="collapse-item" href="QLThuTien.jsp">Tiền Thuê</a>
                             <div class="collapse-divider"></div>
                             <h6 class="collapse-header">Khách Hàng:</h6>
                             <a class="collapse-item" href="QLKH.jsp">Khách hàng</a>
@@ -208,7 +210,7 @@
                                                         }
                                                     %>
                                                 </td>
-                                                <td><%= p.getGiaThue()%></td>
+                                                <td><%= String.format("%.0f", p.getGiaThue())%></td>
                                                 <td>
                                                     <%if (p.getTrangThai() == 1) {
                                                     %>
@@ -226,7 +228,7 @@
                                                     %>
                                                 </td>
                                                 <td>
-                                                        <a onclick="confDel(<%= p.getIdPhong() %>)" class="btn btn-danger btn-circle" style="margin-left: 24%;">
+                                                    <a onclick="confDel(<%= p.getIdPhong()%>)" class="btn btn-danger btn-circle" style="margin-left: 24%;">
                                                         <i class="fas fa-trash"></i>
                                                     </a>
                                                     <a href="CRUD?id=<%= p.getIdPhong()%>&type=edit&manage=phongtro" class="btn btn-info btn-circle">
@@ -292,12 +294,12 @@
         </div>
 
 
-
         <script>
             function confDel(id) {
-                if (confirm("Xác nhận xóa phòng ?") == true) {
-                    document.location.href = "CRUD?id="+id+"&type=del&manage=phongtro";
-                }else{
+                if (confirm("Are you sure you want to delete this column?") == true) {
+                    document.location.href = "CRUD?id=" + id + "&type=del&manage=phongtro";
+                } else {
+
                 }
             }
         </script>

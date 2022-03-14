@@ -73,8 +73,9 @@
                     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
                             <a class="collapse-item" href="ThemVaSuaKH.jsp">Khách Hàng</a>
-                            <a class="collapse-item" href="cards.html">Dịch Vụ</a>
-                            <a class="collapse-item" href="ThemVaSuaPhong.jsp">Phòng trọ</a>
+                            <a class="collapse-item" href="ThemVaSuaDV.jsp">Dịch Vụ</a>
+                            <a class="collapse-item" href="ThemVaSuaPhong.jsp">Phòng Trọ</a>
+                            <a class="collapse-item" href="ThemVaSuaTT.jsp">Hoá Đơn</a>
                         </div>
                     </div>
                 </li>
@@ -96,6 +97,7 @@
                             <div class="collapse-divider"></div>
                             <h6 class="collapse-header">Phòng Trọ:</h6>
                             <a class="collapse-item" href="QLPhong.jsp">Phòng trọ</a>
+                            <a class="collapse-item" href="QLThuTien.jsp">Tiền Thuê</a>
                             <div class="collapse-divider"></div>
                             <h6 class="collapse-header">Khách Hàng:</h6>
                             <a class="collapse-item" href="QLKH.jsp">Khách hàng</a>
@@ -180,7 +182,6 @@
                                                 ArrayList<PhongTro> a3 = DAO.Home.getPhongTroByID(Integer.parseInt(request.getAttribute("id").toString()));
                                                 for (PhongTro dtophongtro : a3) {
                                         %>
-
                                         <h3 class="mb-5">Thay đổi thông tin</h3>
                                         <div class="form-outline mb-4">
                                             <h6 class="m-0 font-weight-bold text-primary">Mã phòng</h6>
@@ -218,12 +219,62 @@
                                         </div>
                                         <h6 class="m-0 font-weight-bold text-primary">Tháng thuê</h6>
                                         <div class="form-outline mb-4">
-                                            <input name="ThangThue" type="number" id="typeEmailX-2" class="form-control form-control-lg" placeholder="Tháng Thuê" value="<%= dtophongtro.getThangThue()%>" readonly=""/>
+                                            <select name="ThangThue" class="form-control form-control-lg"  id="Thangthue">
+                                                <%
+                                                    if (dtophongtro.getThangThue() == 0) {
+                                                %>
+                                                <option value="0" selected>Trống</option>
+                                                <%
+                                                } else {
+                                                %>
+                                                <option value="0">Trống</option>
+                                                <%
+                                                    }
+                                                    for (int i = 1; i <= 12; i++) {
+                                                        if (i == dtophongtro.getThangThue()) {
+                                                %>
+                                                <option value="<%= i%>" selected><%= i%></option>
+                                                <%
+                                                } else {
+                                                %>
+                                                <option value="<%= i%>"><%= i%></option>
+                                                <%
+                                                        }
+                                                    }
+                                                %>
+                                            </select>
                                         </div>
                                         <h6 class="m-0 font-weight-bold text-primary">Giá thuê</h6>
                                         <div class="form-outline mb-4">
-                                            <input name="GiaThue" type="number" id="typeEmailX-2" class="form-control form-control-lg" placeholder="Giá Thuê" value="<%= dtophongtro.getGiaThue()%>"/>
+                                            <input name="GiaThue" type="text" id="typeEmailX-2" class="form-control form-control-lg" placeholder="Giá Thuê" value="<%= dtophongtro.getGiaThue()%>" required pattern="^[1-9]+[0-9]*$" title="Giá Tiền phải là số dương"/>
                                         </div>
+                                        <h6 class="m-0 font-weight-bold text-primary">Trạng Thái</h6>
+                                        <div class="form-outline mb-4">
+                                            <select name="trangThai" class="form-control form-control-lg"  id="gender">
+                                                <%
+                                                    if (dtophongtro.getTrangThai() == 1) {
+                                                %>
+                                                <option value="1" selected>Được Thuê</option>
+                                                <option value="2">Trống</option>
+                                                <option value="3">Đang sửa chữa</option>
+                                                <%
+                                                } else if (dtophongtro.getTrangThai() == 2) {
+                                                %>
+                                                <option value="1">Được Thuê</option>
+                                                <option value="2" selected>Trống</option>
+                                                <option value="3">Đang sửa chữa</option>
+                                                <%
+                                                } else {
+                                                %>
+                                                <option value="1">Được Thuê</option>
+                                                <option value="2">Trống</option>
+                                                <option value="3" selected>Đang sửa chữa</option>
+                                                <%
+                                                    }
+                                                %>
+                                            </select>
+                                        </div>
+
                                         <%
                                             }
                                         %>
@@ -250,24 +301,32 @@
                                         <h6 class="m-0 font-weight-bold text-primary">Tháng thuê</h6>
                                         <div class="form-outline mb-4">
                                             <select name="ThangThue" class="form-control form-control-lg"  id="Thangthue">
+                                                <%
+                                                    for (int i = 0; i <= 12; i++) {
+                                                        if (i == 0) {
+                                                %>
                                                 <option value="0">Trống</option>
-                                                <option value="1">1</option>
-                                                <option value="2">2</option>
-                                                <option value="3">3</option>
-                                                <option value="4">4</option>
-                                                <option value="5">5</option>
-                                                <option value="6">6</option>
-                                                <option value="7">7</option>
-                                                <option value="8">8</option>
-                                                <option value="9">9</option>
-                                                <option value="10">10</option>
-                                                <option value="11">11</option>
-                                                <option value="12">12</option>
+                                                <%
+                                                } else {
+                                                %>
+                                                <option value="<%= i%>"><%= i%></option>
+                                                <%
+                                                        }
+                                                    }
+                                                %>
                                             </select>
                                         </div>
                                         <h6 class="m-0 font-weight-bold text-primary">Giá thuê</h6>
                                         <div class="form-outline mb-4">
-                                            <input name="GiaThue" type="number" id="typeEmailX-2" class="form-control form-control-lg" placeholder="Giá Thuê" value="0"/>
+                                            <input name="GiaThue" type="number" id="typeEmailX-2" class="form-control form-control-lg" placeholder="Giá Thuê" value="0" required pattern="^[1-9]\d*$" title="Giá Tiền phải là số dương"/>
+                                        </div>
+                                        <h6 class="m-0 font-weight-bold text-primary">Trạng Thái</h6>
+                                        <div class="form-outline mb-4">
+                                            <select name="trangThai" class="form-control form-control-lg"  id="gender">
+                                                <option value="1">Được Thuê</option>
+                                                <option value="2">Trống</option>
+                                                <option value="3">Đang sửa chữa</option>
+                                            </select>
                                         </div>
                                         <button class="btn btn-primary btn-lg btn-block" type="submit" name="type" value="add">Thêm</button>
                                         <%

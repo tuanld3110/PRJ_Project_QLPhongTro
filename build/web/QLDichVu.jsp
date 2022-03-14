@@ -63,8 +63,9 @@
                     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
                             <a class="collapse-item" href="ThemVaSuaKH.jsp">Khách Hàng</a>
-                            <a class="collapse-item" href="cards.html">Dịch Vụ</a>
-                            <a class="collapse-item" href="ThemVaSuaPhong.jsp">Phòng trọ</a>
+                            <a class="collapse-item" href="ThemVaSuaDV.jsp">Dịch Vụ</a>
+                            <a class="collapse-item" href="ThemVaSuaPhong.jsp">Phòng Trọ</a>
+                            <a class="collapse-item" href="ThemVaSuaTT.jsp">Hoá Đơn</a>
                         </div>
                     </div>
                 </li>
@@ -86,6 +87,7 @@
                             <div class="collapse-divider"></div>
                             <h6 class="collapse-header">Phòng Trọ:</h6>
                             <a class="collapse-item" href=QLPhong.jsp>Phòng trọ</a>
+                            <a class="collapse-item" href="QLThuTien.jsp">Tiền Thuê</a>
                             <div class="collapse-divider"></div>
                             <h6 class="collapse-header">Khách Hàng:</h6>
                             <a class="collapse-item" href="QLKH.jsp">Khách hàng</a>
@@ -152,7 +154,7 @@
                         <!-- DataTales Example -->
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
-                                <h6 class="m-0 font-weight-bold text-primary">Quản Lý Khách Hàng</h6>
+                                <h6 class="m-0 font-weight-bold text-primary">Quản Lý Dịch Vụ</h6>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -183,7 +185,7 @@
                                                     <a onclick="confDel(<%= p.getIdDV()%>)" class="btn btn-danger btn-circle" style="margin-left: 24%;">
                                                         <i class="fas fa-trash"></i>
                                                     </a>
-                                                    <a href="CRUD?id=<%= p.getIdDV()%>&type=edit&manage=DV" class="btn btn-info btn-circle">
+                                                    <a href="CRUD?id=<%= p.getIdDV()%>&type=edit&manage=DV&idTT=<%= p.getIdThuTien() %>" class="btn btn-info btn-circle">
                                                         <i class="fas fa-pen"></i>
                                                     </a>
                                                 </td>
@@ -249,14 +251,13 @@
 
         <script>
             function confDel(id) {
-                if (confirm("Xác nhận xóa phòng ?") == true) {
+                if (confirm("Are you sure you want to delete this column?") == true) {
                     document.location.href = "CRUD?id=" + id + "&type=del&manage=DV";
                 } else {
 
                 }
             }
         </script>
-        
         <!-- Bootstrap core JavaScript-->
         <script src="vendor/jquery/jquery.min.js"></script>
         <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
