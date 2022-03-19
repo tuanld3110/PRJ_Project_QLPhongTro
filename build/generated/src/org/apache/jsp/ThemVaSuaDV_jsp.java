@@ -3,12 +3,14 @@ package org.apache.jsp;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.jsp.*;
+import DTO.ThuTien;
+import DTO.DichVu;
 import DTO.KhachHang;
 import javax.xml.ws.Holder;
 import DTO.PhongTro;
 import java.util.ArrayList;
 
-public final class QLPhong_jsp extends org.apache.jasper.runtime.HttpJspBase
+public final class ThemVaSuaDV_jsp extends org.apache.jasper.runtime.HttpJspBase
     implements org.apache.jasper.runtime.JspSourceDependent {
 
   private static final JspFactory _jspxFactory = JspFactory.getDefaultFactory();
@@ -52,6 +54,8 @@ public final class QLPhong_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("\n");
       out.write("\n");
       out.write("\n");
+      out.write("\n");
+      out.write("\n");
       out.write("<!DOCTYPE html>\n");
       out.write("<html lang=\"en\">\n");
       out.write("\n");
@@ -76,7 +80,17 @@ public final class QLPhong_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("\n");
       out.write("        <!-- Custom styles for this page -->\n");
       out.write("        <link href=\"vendor/datatables/dataTables.bootstrap4.min.css\" rel=\"stylesheet\">\n");
-      out.write("\n");
+      out.write("        <style>\n");
+      out.write("            select[readonly]{\n");
+      out.write("                pointer-events: none;\n");
+      out.write("                touch-action: none;\n");
+      out.write("            }\n");
+      out.write("            input::-webkit-outer-spin-button,\n");
+      out.write("            input::-webkit-inner-spin-button {\n");
+      out.write("                -webkit-appearance: none;\n");
+      out.write("                margin: 0;\n");
+      out.write("            }\n");
+      out.write("        </style>\n");
       out.write("    </head>\n");
       out.write("\n");
       out.write("    <body id=\"page-top\">\n");
@@ -128,7 +142,7 @@ public final class QLPhong_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("                            <a class=\"collapse-item\" href=\"QLDichVu.jsp\">Nước và Điện</a>\n");
       out.write("                            <div class=\"collapse-divider\"></div>\n");
       out.write("                            <h6 class=\"collapse-header\">Phòng Trọ:</h6>\n");
-      out.write("                            <a class=\"collapse-item\" href=QLPhong.jsp>Phòng trọ</a>\n");
+      out.write("                            <a class=\"collapse-item\" href=\"QLPhong.jsp\">Phòng trọ</a>\n");
       out.write("                            <a class=\"collapse-item\" href=\"QLThuTien.jsp\">Tiền Thuê</a>\n");
       out.write("                            <div class=\"collapse-divider\"></div>\n");
       out.write("                            <h6 class=\"collapse-header\">Khách Hàng:</h6>\n");
@@ -198,135 +212,147 @@ public final class QLPhong_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("                        <!-- DataTales Example -->\n");
       out.write("                        <div class=\"card shadow mb-4\">\n");
       out.write("                            <div class=\"card-header py-3\">\n");
-      out.write("                                <h6 class=\"m-0 font-weight-bold text-primary\">Quản Lý Thuê Phòng</h6>\n");
+      out.write("                                <h6 class=\"m-0 font-weight-bold text-primary\">Quản Lý Dịch Vụ</h6>\n");
       out.write("                            </div>\n");
       out.write("                            <div class=\"card-body\">\n");
       out.write("                                <div class=\"table-responsive\">\n");
-      out.write("                                    <table class=\"table table-bordered\" id=\"dataTable\" width=\"100%\" cellspacing=\"0\">\n");
-      out.write("                                        <thead>\n");
-      out.write("                                            <tr>\n");
-      out.write("                                                <th>ID Phòng</th>\n");
-      out.write("                                                <th>Khách Hàng</th>\n");
-      out.write("                                                <th>Tháng thuê</th>\n");
-      out.write("                                                <th>Giá Thuê</th>\n");
-      out.write("                                                <th>Trạng Thái</th>\n");
-      out.write("                                                <th></th>\n");
-      out.write("                                            </tr>\n");
-      out.write("                                        </thead>\n");
+      out.write("                                    <form action=\"CRUD\" method=\"GET\">\n");
+      out.write("                                        <input type=\"hidden\" name=\"manage\" value=\"DV\">\n");
       out.write("                                        ");
 
-                                            ArrayList<PhongTro> al = DAO.Home.getPhongTro();
+                                            String type = "";
+                                            try {
+                                                type = request.getAttribute("type").toString();
+                                            } catch (Exception e) {
+                                                System.out.println(e);
+                                                type = "add";
+                                            }
+                                            if (type == "edit") {
+                                                ArrayList<DichVu> dto = DAO.Home.getDichVuByID(Integer.parseInt(request.getParameter("id").toString()));
+                                                for (DichVu dtoDV : dto) {
                                         
       out.write("\n");
-      out.write("                                        <tbody>\n");
-      out.write("                                            ");
+      out.write("                                        <h3 class=\"mb-5\">Thay đổi thông tin</h3>\n");
+      out.write("                                        <h6 class=\"m-0 font-weight-bold text-primary\">ID Dịch Vụ</h6>\n");
+      out.write("                                        <div class=\"form-outline mb-4\">\n");
+      out.write("                                            <input name=\"id\" type=\"text\" id=\"typeEmailX-2\" class=\"form-control form-control-lg\" value=\"");
+      out.print( dtoDV.getIdDV());
+      out.write("\" readonly/>\n");
+      out.write("                                        </div>\n");
+      out.write("                                        <h6 class=\"m-0 font-weight-bold text-primary\">ID Hoá Đơn</h6>\n");
+      out.write("                                        <div class=\"form-outline mb-4\">\n");
+      out.write("                                            <select name=\"idHD\" class=\"form-control form-control-lg\"  id=\"gender\">\n");
+      out.write("                                                ");
 
-                                                for (PhongTro p : al) {
-                                                    if (p.getTrangThai() != 0) {
-                                            
+                                                    ArrayList<ThuTien> arr = DAO.Home.getThuTien();
+                                                    for (ThuTien dtoEdit : arr) {
+                                                        if (dtoEdit.getIdThuTien() == Integer.parseInt(request.getParameter("idTT"))) {
+                                                
       out.write("\n");
-      out.write("                                            <tr>\n");
-      out.write("                                                <td>");
-      out.print( p.getIdPhong());
-      out.write("</td>\n");
-      out.write("                                                <td>\n");
-      out.write("                                                    ");
-if (p.getIdKH() != 0) {
-                                                    
-      out.write("\n");
-      out.write("\n");
-      out.write("                                                    ");
+      out.write("                                                <option value=\"");
+      out.print( dtoEdit.getIdThuTien());
+      out.write("\" selected>");
+      out.print( dtoEdit.getIdThuTien());
+      out.write("</option>\n");
+      out.write("                                                ");
 
-                                                        ArrayList<KhachHang> a2 = DAO.Home.getKhachHangByID(p.getIdKH());
-                                                        for (KhachHang kh : a2) {
-                                                    
-      out.write("\n");
-      out.write("\n");
-      out.write("                                                    ");
-      out.print( kh.getTenKH());
-      out.write("\n");
-      out.write("\n");
-      out.write("                                                    ");
+                                                } else {
 
-                                                        }
-                                                    } else {
-                                                    
+                                                
       out.write("\n");
-      out.write("                                                    Trống\n");
-      out.write("                                                    ");
-
-                                                        }
-                                                    
-      out.write("\n");
-      out.write("                                                </td>\n");
-      out.write("                                                <td>\n");
-      out.write("                                                    ");
-if (p.getThangThue() != 0) {
-                                                    
-      out.write("\n");
-      out.write("                                                    ");
-      out.print( p.getThangThue());
-      out.write("\n");
-      out.write("                                                    ");
-
-                                                    } else {
-                                                    
-      out.write("\n");
-      out.write("                                                    Trống\n");
-      out.write("                                                    ");
+      out.write("                                                <option value=\"");
+      out.print( dtoEdit.getIdThuTien());
+      out.write('"');
+      out.write('>');
+      out.print( dtoEdit.getIdThuTien());
+      out.write("</option>\n");
+      out.write("                                                ");
 
                                                         }
-                                                    
+                                                    }
+                                                
       out.write("\n");
-      out.write("                                                </td>\n");
-      out.write("                                                <td>");
-      out.print( String.format("%.0f", p.getGiaThue()));
-      out.write("</td>\n");
-      out.write("                                                <td>\n");
-      out.write("                                                    ");
-if (p.getTrangThai() == 1) {
-                                                    
-      out.write("\n");
-      out.write("                                                    Được Thuê\n");
-      out.write("                                                    ");
+      out.write("                                            </select>\n");
+      out.write("                                        </div>\n");
+      out.write("                                        <h6 class=\"m-0 font-weight-bold text-primary\">Tên Dịch Vụ</h6>\n");
+      out.write("                                        <div class=\"form-outline mb-4\">\n");
+      out.write("                                            <select name=\"name\" class=\"form-control form-control-lg\"  id=\"gender\">\n");
+      out.write("                                                ");
 
-                                                    } else if (p.getTrangThai() == 2) {
-                                                    
+                                                    if (dtoDV.getTenDV().equals("Điện")) {
+                                                
       out.write("\n");
-      out.write("                                                    Trống\n");
-      out.write("                                                    ");
+      out.write("                                                <option value=\"Điện\" selected>Điện</option>\n");
+      out.write("                                                <option value=\"Nước\">Nước</option>\n");
+      out.write("                                                ");
 
-                                                    } else {
-                                                    
-      out.write("\n");
-      out.write("                                                    Đang sửa chữa\n");
-      out.write("                                                    ");
+                                                } else {
 
-                                                        }
-                                                    
+                                                
       out.write("\n");
-      out.write("                                                </td>\n");
-      out.write("                                                <td>\n");
-      out.write("                                                    <a onclick=\"confDel(");
-      out.print( p.getIdPhong());
-      out.write(")\" class=\"btn btn-danger btn-circle\" style=\"margin-left: 24%;\">\n");
-      out.write("                                                        <i class=\"fas fa-trash\"></i>\n");
-      out.write("                                                    </a>\n");
-      out.write("                                                    <a href=\"CRUD?id=");
-      out.print( p.getIdPhong());
-      out.write("&type=edit&manage=phongtro\" class=\"btn btn-info btn-circle\">\n");
-      out.write("                                                        <i class=\"fas fa-pen\"></i>\n");
-      out.write("                                                    </a>\n");
-      out.write("                                                </td>\n");
-      out.write("                                            </tr>\n");
-      out.write("                                            ");
+      out.write("                                                <option value=\"Điện\">Điện</option>\n");
+      out.write("                                                <option value=\"Nước\" selected>Nước</option>\n");
+      out.write("                                                ");
+
+                                                }
+                                                
+      out.write("\n");
+      out.write("                                            </select>\n");
+      out.write("                                        </div>\n");
+      out.write("                                        <h6 class=\"m-0 font-weight-bold text-primary\">Giá Dịch Vụ</h6>\n");
+      out.write("                                        <div class=\"form-outline mb-4\">\n");
+      out.write("                                            <input name=\"price\" type=\"number\" id=\"typeEmailX-2\" class=\"form-control form-control-lg\" placeholder=\"Giá Dịch Vụ\" value=\"");
+      out.print( dtoDV.getGiaDV());
+      out.write("\" required pattern=\"^[1-9]\\d*$\" title=\"Giá Tiền phải là số dương\"/>\n");
+      out.write("                                        </div>\n");
+      out.write("\n");
+      out.write("                                        <button class=\"btn btn-primary btn-lg btn-block\" type=\"submit\"name=\"type\" value=\"ApplyEdit\">Thay đổi</button>\n");
+      out.write("                                        <button class=\"btn btn-primary btn-lg btn-block\" type=\"submit\" name=\"type\" value=\"Cancel\">Huỷ</button>\n");
+      out.write("                                        ");
+
+                                            }
+                                        } else {
+                                        
+      out.write("\n");
+      out.write("                                        <h3 class=\"mb-5\">Thêm Dịch Vụ</h3>\n");
+      out.write("                                        <h6 class=\"m-0 font-weight-bold text-primary\">ID Hoá Đơn</h6>\n");
+      out.write("                                        <div class=\"form-outline mb-4\">\n");
+      out.write("                                            <select name=\"idHD\" class=\"form-control form-control-lg\"  id=\"gender\">\n");
+      out.write("                                                ");
+
+                                                    ArrayList<ThuTien> arr = DAO.Home.getThuTien();
+                                                    for (ThuTien dto : arr) {
+                                                
+      out.write("\n");
+      out.write("                                                <option value=\"");
+      out.print( dto.getIdThuTien());
+      out.write('"');
+      out.write('>');
+      out.print( dto.getIdThuTien());
+      out.write("</option>\n");
+      out.write("                                                ");
 
                                                     }
-                                                }
-                                            
+                                                
       out.write("\n");
-      out.write("                                        </tbody>\n");
-      out.write("                                    </table>\n");
+      out.write("                                            </select>\n");
+      out.write("                                        </div>\n");
+      out.write("                                        <h6 class=\"m-0 font-weight-bold text-primary\">Tên Dịch Vụ</h6>\n");
+      out.write("                                        <div class=\"form-outline mb-4\">\n");
+      out.write("                                            <input name=\"name\" type=\"text\" id=\"typeEmailX-2\" class=\"form-control form-control-lg\" placeholder=\"Tên Dịch Vụ\" required title=\"Tên không hợp lệ\"/>\n");
+      out.write("                                        </div>\n");
+      out.write("                                        <h6 class=\"m-0 font-weight-bold text-primary\">Giá Dịch Vụ</h6>\n");
+      out.write("                                        <div class=\"form-outline mb-4\">\n");
+      out.write("                                            <input name=\"price\" type=\"text\" id=\"typeEmailX-2\" class=\"form-control form-control-lg\" placeholder=\"Giá Dịch Vụ\" required required pattern=\"^[1-9]\\d*$\" title=\"Giá Tiền phải là số dương\"/>\n");
+      out.write("                                        </div>\n");
+      out.write("\n");
+      out.write("                                        <button class=\"btn btn-primary btn-lg btn-block\" type=\"submit\"  name=\"type\" value=\"add\">Thêm</button>\n");
+      out.write("                                        ");
+
+                                            }
+                                        
+      out.write("\n");
+      out.write("                                    </form>\n");
       out.write("                                </div>\n");
       out.write("                            </div>\n");
       out.write("                        </div>\n");
@@ -379,15 +405,6 @@ if (p.getTrangThai() == 1) {
       out.write("        </div>\n");
       out.write("\n");
       out.write("\n");
-      out.write("        <script>\n");
-      out.write("            function confDel(id) {\n");
-      out.write("                if (confirm(\"Are you sure you want to delete this column?\") == true) {\n");
-      out.write("                    document.location.href = \"CRUD?id=\" + id + \"&type=del&manage=phongtro\";\n");
-      out.write("                } else {\n");
-      out.write("\n");
-      out.write("                }\n");
-      out.write("            }\n");
-      out.write("        </script>\n");
       out.write("\n");
       out.write("        <!-- Bootstrap core JavaScript-->\n");
       out.write("        <script src=\"vendor/jquery/jquery.min.js\"></script>\n");

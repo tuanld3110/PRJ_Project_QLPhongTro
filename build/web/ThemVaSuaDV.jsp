@@ -1,19 +1,18 @@
 <%-- 
     Document   : Home
     Created on : Feb 21, 2022, 9:47:14 AM
-    Author     : crrtt
+    Author     : 84915
 --%>
 
-<%@page import="DTO.ThuTien"%>
-<%@page import="DTO.DichVu"%>
-<%@page import="DTO.KhachHang"%>
+<%@page import="model.ThuTien"%>
+<%@page import="model.DichVu"%>
+<%@page import="model.KhachHang"%>
 <%@page import="javax.xml.ws.Holder"%>
-<%@page import="DTO.PhongTro"%>
+<%@page import="model.PhongTro"%>
 <%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
-
     <head>
 
         <meta charset="utf-8">
@@ -149,7 +148,7 @@
                                      aria-labelledby="userDropdown">
                                     <a class="dropdown-item" href="" data-toggle="modal" data-target="#logoutModal">
                                         <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                        Logout
+                                        Đăng Xuất
                                     </a>
                                 </div>
                             </li>
@@ -180,8 +179,8 @@
                                                 type = "add";
                                             }
                                             if (type == "edit") {
-                                                ArrayList<DichVu> dto = DAO.Home.getDichVuByID(Integer.parseInt(request.getParameter("id").toString()));
-                                                for (DichVu dtoDV : dto) {
+                                                ArrayList<DichVu> listDichVuByID = DAO.Home.getDichVuByID(Integer.parseInt(request.getParameter("id").toString()));
+                                                for (DichVu dtoDV : listDichVuByID) {
                                         %>
                                         <h3 class="mb-5">Thay đổi thông tin</h3>
                                         <h6 class="m-0 font-weight-bold text-primary">ID Dịch Vụ</h6>
@@ -190,18 +189,18 @@
                                         </div>
                                         <h6 class="m-0 font-weight-bold text-primary">ID Hoá Đơn</h6>
                                         <div class="form-outline mb-4">
-                                            <select name="idHD" class="form-control form-control-lg"  id="gender">
+                                            <select name="idHD" class="form-control form-control-lg" >
                                                 <%
-                                                    ArrayList<ThuTien> arr = DAO.Home.getThuTien();
-                                                    for (ThuTien dtoEdit : arr) {
-                                                        if (dtoEdit.getIdThuTien() == Integer.parseInt(request.getParameter("idTT"))) {
+                                                    ArrayList<ThuTien> listThuTien = DAO.Home.getThuTien();
+                                                    for (ThuTien dtoTT : listThuTien) {
+                                                        if (dtoTT.getIdThuTien() == Integer.parseInt(request.getParameter("idTT"))) {
                                                 %>
-                                                <option value="<%= dtoEdit.getIdThuTien()%>" selected><%= dtoEdit.getIdThuTien()%></option>
+                                                <option value="<%= dtoTT.getIdThuTien()%>" selected><%= dtoTT.getIdThuTien()%></option>
                                                 <%
                                                 } else {
 
                                                 %>
-                                                <option value="<%= dtoEdit.getIdThuTien()%>"><%= dtoEdit.getIdThuTien()%></option>
+                                                <option value="<%= dtoTT.getIdThuTien()%>"><%= dtoTT.getIdThuTien()%></option>
                                                 <%
                                                         }
                                                     }
@@ -210,7 +209,7 @@
                                         </div>
                                         <h6 class="m-0 font-weight-bold text-primary">Tên Dịch Vụ</h6>
                                         <div class="form-outline mb-4">
-                                            <select name="name" class="form-control form-control-lg"  id="gender">
+                                            <select name="name" class="form-control form-control-lg" >
                                                 <%
                                                     if (dtoDV.getTenDV().equals("Điện")) {
                                                 %>
@@ -241,12 +240,12 @@
                                         <h3 class="mb-5">Thêm Dịch Vụ</h3>
                                         <h6 class="m-0 font-weight-bold text-primary">ID Hoá Đơn</h6>
                                         <div class="form-outline mb-4">
-                                            <select name="idHD" class="form-control form-control-lg"  id="gender">
+                                            <select name="idHD" class="form-control form-control-lg" >
                                                 <%
-                                                    ArrayList<ThuTien> arr = DAO.Home.getThuTien();
-                                                    for (ThuTien dto : arr) {
+                                                    ArrayList<ThuTien> listThuTien = DAO.Home.getThuTien();
+                                                    for (ThuTien dtoTT : listThuTien) {
                                                 %>
-                                                <option value="<%= dto.getIdThuTien()%>"><%= dto.getIdThuTien()%></option>
+                                                <option value="<%= dtoTT.getIdThuTien()%>"><%= dtoTT.getIdThuTien()%></option>
                                                 <%
                                                     }
                                                 %>
@@ -254,7 +253,10 @@
                                         </div>
                                         <h6 class="m-0 font-weight-bold text-primary">Tên Dịch Vụ</h6>
                                         <div class="form-outline mb-4">
-                                            <input name="name" type="text" id="typeEmailX-2" class="form-control form-control-lg" placeholder="Tên Dịch Vụ" required title="Tên không hợp lệ"/>
+                                            <select name="name" class="form-control form-control-lg"  id="gender">
+                                                <option value="Điện">Điện</option>
+                                                <option value="Nước">Nước</option>
+                                            </select>
                                         </div>
                                         <h6 class="m-0 font-weight-bold text-primary">Giá Dịch Vụ</h6>
                                         <div class="form-outline mb-4">
@@ -303,15 +305,15 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Bạn muốn Đăng Xuất ?</h5>
                         <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
                     </div>
-                    <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                    <div class="modal-body">Chọn Đăng Xuất bên dưới nếu muốn kết thúc phiên đăng nhập.</div>
                     <div class="modal-footer">
-                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                        <a class="btn btn-primary" href="Login.jsp">Logout</a>
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Hủy</button>
+                        <a class="btn btn-primary" href="Login.jsp">Đăng Xuất</a>
                     </div>
                 </div>
             </div>

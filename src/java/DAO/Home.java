@@ -5,10 +5,10 @@
  */
 package DAO;
 
-import DTO.DichVu;
-import DTO.KhachHang;
-import DTO.PhongTro;
-import DTO.ThuTien;
+import model.DichVu;
+import model.KhachHang;
+import model.PhongTro;
+import model.ThuTien;
 import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -19,13 +19,13 @@ import java.util.ArrayList;
 
 /**
  *
- * @author crrtt
+ * @author 84915
  */
 public class Home {
 
     public static ArrayList<PhongTro> getPhongTro() throws SQLException {
         ArrayList<PhongTro> al = new ArrayList<>();
-        Connection conn = DB.DBUtilities.getConnection();
+        Connection conn = DB.DBContext.getConnection();
         PreparedStatement st = conn.prepareStatement("select * from phongTro");
         ResultSet rs = st.executeQuery();
         while (rs.next()) {
@@ -44,7 +44,7 @@ public class Home {
     public static int getThangThueByID(int id) throws SQLException {
         int ThangThue = 0;
         try {
-            Connection conn = DB.DBUtilities.getConnection();
+            Connection conn = DB.DBContext.getConnection();
             PreparedStatement st = conn.prepareStatement("select thangThue from phongTro where idPhong = " + id);
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
@@ -60,7 +60,7 @@ public class Home {
     public static ArrayList<PhongTro> getPhongTroByIDKH(int id) throws SQLException {
         ArrayList<PhongTro> al = new ArrayList<>();
         try {
-            Connection conn = DB.DBUtilities.getConnection();
+            Connection conn = DB.DBContext.getConnection();
             PreparedStatement st = conn.prepareStatement("select * from phongTro where idKH = " + id);
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
@@ -82,7 +82,7 @@ public class Home {
     public static ArrayList<PhongTro> getPhongTroByID(int id) throws SQLException {
         ArrayList<PhongTro> al = new ArrayList<>();
         try {
-            Connection conn = DB.DBUtilities.getConnection();
+            Connection conn = DB.DBContext.getConnection();
             PreparedStatement st = conn.prepareStatement("select * from phongTro where idPhong = " + id);
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
@@ -103,7 +103,7 @@ public class Home {
 
     public static ArrayList<KhachHang> getKhachHang() throws SQLException {
         ArrayList<KhachHang> al = new ArrayList<>();
-        Connection conn = DB.DBUtilities.getConnection();
+        Connection conn = DB.DBContext.getConnection();
         PreparedStatement st = conn.prepareStatement("select * from khachHang where trangThai = 1");
         ResultSet rs = st.executeQuery();
         while (rs.next()) {
@@ -121,7 +121,7 @@ public class Home {
 
     public static ArrayList<KhachHang> getKhachHangByID(int id) throws SQLException {
         ArrayList<KhachHang> al = new ArrayList<>();
-        Connection conn = DB.DBUtilities.getConnection();
+        Connection conn = DB.DBContext.getConnection();
         PreparedStatement st = conn.prepareStatement("select * from khachHang where idKH = " + id);
         ResultSet rs = st.executeQuery();
         while (rs.next()) {
@@ -138,14 +138,14 @@ public class Home {
     }
 
     public static int UpdateKH(KhachHang dto) throws SQLServerException, SQLException {
-        Connection cnn = DB.DBUtilities.getConnection();
+        Connection cnn = DB.DBContext.getConnection();
         PreparedStatement stm = null;
         stm = cnn.prepareStatement("UPDATE khachHang SET tenKH='" + dto.getTenKH() + "', SDT='" + dto.getSDT() + "',CMND='" + dto.getCMND() + "',gioiTinh='" + dto.getGioiTinh() + "' WHERE idKH = '" + dto.getIdKH() + "'");
         return stm.executeUpdate();
     }
 
     public static int InsertKH(KhachHang dto) throws SQLServerException, SQLException {
-        Connection cnn = DB.DBUtilities.getConnection();
+        Connection cnn = DB.DBContext.getConnection();
         PreparedStatement stm = null;
         stm = cnn.prepareStatement("INSERT INTO khachHang VALUES(?,?,?,?,?)");
         stm.setString(1, dto.getTenKH());
@@ -157,13 +157,13 @@ public class Home {
     }
 
     public static int DeleteSQL(String sqlquery) throws SQLServerException, SQLException {
-        Connection cnn = DB.DBUtilities.getConnection();
+        Connection cnn = DB.DBContext.getConnection();
         PreparedStatement stm = cnn.prepareStatement(sqlquery);
         return stm.executeUpdate();
     }
 
     public static int UpdatePhongTro(PhongTro dto) throws SQLServerException, SQLException {
-        Connection cnn = DB.DBUtilities.getConnection();
+        Connection cnn = DB.DBContext.getConnection();
         PreparedStatement stm = null;
         if (dto.getIdKH() != 0) {
             stm = cnn.prepareStatement("UPDATE phongTro SET idKH='" + dto.getIdKH() + "',giaThue='" + dto.getGiaThue() + "',thangThue='" + dto.getThangThue() + "',trangThai='" + dto.getTrangThai() + "' WHERE idPhong = '" + dto.getIdPhong() + "'");
@@ -174,7 +174,7 @@ public class Home {
     }
 
     public static int InsertPhongTro(PhongTro dto) throws SQLServerException, SQLException {
-        Connection cnn = DB.DBUtilities.getConnection();
+        Connection cnn = DB.DBContext.getConnection();
         PreparedStatement stm = null;
         if (dto.getIdKH() != 0) {
             stm = cnn.prepareStatement("INSERT INTO phongTro VALUES(?,?,?,?)");
@@ -193,7 +193,7 @@ public class Home {
 
     public static ArrayList<DichVu> getDichVu() throws SQLException {
         ArrayList<DichVu> al = new ArrayList<>();
-        Connection conn = DB.DBUtilities.getConnection();
+        Connection conn = DB.DBContext.getConnection();
         PreparedStatement st = conn.prepareStatement("select * from dichVu");
         ResultSet rs = st.executeQuery();
         while (rs.next()) {
@@ -211,7 +211,7 @@ public class Home {
 
     public static ArrayList<DichVu> getDichVuByID(int id) throws SQLException {
         ArrayList<DichVu> al = new ArrayList<>();
-        Connection conn = DB.DBUtilities.getConnection();
+        Connection conn = DB.DBContext.getConnection();
         PreparedStatement st = conn.prepareStatement("select * from dichVu where idDV = " + id);
         ResultSet rs = st.executeQuery();
         while (rs.next()) {
@@ -228,7 +228,7 @@ public class Home {
 
     public static ArrayList<DichVu> getDichVuByIDThuTien(int id) throws SQLException {
         ArrayList<DichVu> arr = new ArrayList<>();
-        Connection conn = DB.DBUtilities.getConnection();
+        Connection conn = DB.DBContext.getConnection();
         PreparedStatement st = conn.prepareStatement("select * from dichVu where idThuTien = " + id);
         ResultSet rs = st.executeQuery();
         while (rs.next()) {
@@ -246,14 +246,14 @@ public class Home {
     }
 
     public static int UpdateDV(DichVu dto) throws SQLServerException, SQLException {
-        Connection cnn = DB.DBUtilities.getConnection();
+        Connection cnn = DB.DBContext.getConnection();
         PreparedStatement stm = cnn.prepareStatement("UPDATE dichVu SET idThuTien='" + dto.getIdThuTien() + "',tenDV='" + dto.getTenDV() + "',giaDV ='" + dto.getGiaDV() + "' WHERE idDV = '" + dto.getIdDV() + "'");
         return stm.executeUpdate();
     }
 
     public static ArrayList<ThuTien> getThuTien() throws SQLException {
         ArrayList<ThuTien> al = new ArrayList<>();
-        Connection conn = DB.DBUtilities.getConnection();
+        Connection conn = DB.DBContext.getConnection();
         PreparedStatement st = conn.prepareStatement("select * from thuTien");
         ResultSet rs = st.executeQuery();
         while (rs.next()) {
@@ -272,7 +272,7 @@ public class Home {
 
     public static ThuTien getThuTienByID(int id) throws SQLException {
         ThuTien p = new ThuTien();
-        Connection conn = DB.DBUtilities.getConnection();
+        Connection conn = DB.DBContext.getConnection();
         PreparedStatement st = conn.prepareStatement("select * from thuTien where idThuTien = " + id);
         ResultSet rs = st.executeQuery();
         while (rs.next()) {
@@ -288,7 +288,7 @@ public class Home {
     }
 
     public static int UpdateTT(ThuTien dto) throws SQLServerException, SQLException {
-        Connection cnn = DB.DBUtilities.getConnection();
+        Connection cnn = DB.DBContext.getConnection();
         PreparedStatement stm;
         LocalDate LD = LocalDate.now();
         int month = LD.getMonthValue();
@@ -301,7 +301,7 @@ public class Home {
     }
 
     public static int InsertDV(DichVu dto) throws SQLServerException, SQLException {
-        Connection cnn = DB.DBUtilities.getConnection();
+        Connection cnn = DB.DBContext.getConnection();
         PreparedStatement stm = null;
         if (dto.getIdThuTien() != 0) {
             stm = cnn.prepareStatement("INSERT INTO dichVu VALUES(?,?,?,?)");
@@ -319,7 +319,7 @@ public class Home {
     }
 
     public static int InsertThuTien(ThuTien dto) throws SQLServerException, SQLException {
-        Connection cnn = DB.DBUtilities.getConnection();
+        Connection cnn = DB.DBContext.getConnection();
         PreparedStatement stm = cnn.prepareStatement("INSERT INTO thuTien VALUES(?,?,?,?,?)");
         stm.setInt(1, dto.getIdPhong());
         stm.setFloat(2, dto.getTongTien());
@@ -331,7 +331,7 @@ public class Home {
     }
 
     public static int RemoveOutOfPT(int id) throws SQLServerException, SQLException {
-        Connection cnn = DB.DBUtilities.getConnection();
+        Connection cnn = DB.DBContext.getConnection();
         PreparedStatement stm = cnn.prepareStatement("UPDATE phongTro SET idKH= cast(NULL as int),thangThue='0', trangThai='2' WHERE idKH = '" + id + "'");
         return stm.executeUpdate();
     }

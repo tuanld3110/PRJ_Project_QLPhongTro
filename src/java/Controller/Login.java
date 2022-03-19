@@ -5,6 +5,7 @@
  */
 package Controller;
 
+import model.ChuNha;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -19,7 +20,7 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author crrtt
+ * @author 84915
  */
 @WebServlet(name = "Login", urlPatterns = {"/Login"})
 public class Login extends HttpServlet {
@@ -37,10 +38,6 @@ public class Login extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-
-        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -78,16 +75,32 @@ public class Login extends HttpServlet {
             String password = request.getParameter("password");
             boolean loginStatus = DAO.Login.Login(username, password);
             if (loginStatus) {
-                HttpSession hs = request.getSession();
-                hs.setAttribute("username", username);
+                request.getSession().setAttribute("username", username);
                 response.sendRedirect("QLPhong.jsp");
             } else {
+                request.getSession().setAttribute("username", null);
                 response.sendRedirect("Login.jsp");
             }
             processRequest(request, response);
         } catch (SQLException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+//       try {
+//            String username = request.getParameter("username");
+//            String password = request.getParameter("password");
+//            ChuNha account = DAO.Login.getAccount(username, password);
+//            if (account == null) {
+//                request.getSession().setAttribute("account", null);
+//                response.sendRedirect("Login.jsp");
+//            } else {
+//                request.getSession().setAttribute("account", account);
+//                response.sendRedirect("QLPhong.jsp");
+//            }
+//            processRequest(request, response);
+//        } catch (SQLException ex) {
+//            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+//        }
 
     }
 

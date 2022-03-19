@@ -5,26 +5,24 @@
  */
 package DAO;
 
+import model.ChuNha;
 import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
- * @author crrtt
+ * @author 84915
  */
 public class Login {
 
-    public static void main(String[] args) throws SQLException {
-        boolean loginStatus = Login("1", "1");
-        System.out.println(loginStatus);
-    }
-
     public static boolean Login(String username, String password) throws SQLServerException, SQLException {
         boolean loginStatus = false;
-        Connection conn = DB.DBUtilities.getConnection();
+        Connection conn = DB.DBContext.getConnection();
         PreparedStatement st = conn.prepareStatement("select * from chuNha where username = ? and password = ?");
         st.setString(1, username);
         st.setString(2, password);
@@ -35,5 +33,5 @@ public class Login {
         conn.close();
         return loginStatus;
     }
-
+    
 }

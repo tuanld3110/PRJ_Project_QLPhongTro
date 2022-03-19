@@ -1,4 +1,4 @@
-/*
+    /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -6,10 +6,10 @@
 package Controller;
 
 import DAO.Home;
-import DTO.DichVu;
-import DTO.KhachHang;
-import DTO.PhongTro;
-import DTO.ThuTien;
+import model.DichVu;
+import model.KhachHang;
+import model.PhongTro;
+import model.ThuTien;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -23,10 +23,10 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author gbuid
+ * @author 84915
  */
 @WebServlet(name = "CRUD", urlPatterns = {"/CRUD"})
-public class CRUD extends HttpServlet {
+public class CRUD extends BaseAuthController {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -44,12 +44,7 @@ public class CRUD extends HttpServlet {
             /* TODO output your page here. You may use following sample code. */
             String id = request.getParameter("id");
             String type = request.getParameter("type");
-            String manage = null;
-            try {
-                manage = request.getAttribute("manage").toString();
-            } catch (Exception e) {
-                manage = request.getParameter("manage");
-            }
+            String manage = request.getParameter("manage");
             switch (manage) {
                 case "phongtro":
                     switch (type) {
@@ -259,7 +254,7 @@ public class CRUD extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void processGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
             processRequest(request, response);
@@ -277,7 +272,7 @@ public class CRUD extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void processPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
             processRequest(request, response);
@@ -294,7 +289,6 @@ public class CRUD extends HttpServlet {
      *
      * @return a String containing servlet description
      */
-    @Override
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>

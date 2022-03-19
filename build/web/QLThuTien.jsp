@@ -1,14 +1,14 @@
 <%-- 
     Document   : Home
     Created on : Feb 21, 2022, 9:47:14 AM
-    Author     : crrtt
+    Author     : 84915
 --%>
 
-<%@page import="DTO.ThuTien"%>
-<%@page import="DTO.DichVu"%>
-<%@page import="DTO.KhachHang"%>
+<%@page import="model.ThuTien"%>
+<%@page import="model.DichVu"%>
+<%@page import="model.KhachHang"%>
 <%@page import="javax.xml.ws.Holder"%>
-<%@page import="DTO.PhongTro"%>
+<%@page import="model.PhongTro"%>
 <%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -139,7 +139,7 @@
                                      aria-labelledby="userDropdown">
                                     <a class="dropdown-item" href="" data-toggle="modal" data-target="#logoutModal">
                                         <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                        Logout
+                                        Đăng Xuất
                                     </a>
                                 </div>
                             </li>
@@ -173,37 +173,37 @@
                                             </tr>
                                         </thead>
                                         <%
-                                            ArrayList<ThuTien> al = DAO.Home.getThuTien();
+                                            ArrayList<ThuTien> listThuTien = DAO.Home.getThuTien();
                                         %>
                                         <tbody>
                                             <%
-                                                for (ThuTien p : al) {
-                                                    int ThangThue = DAO.Home.getThangThueByID(p.getIdPhong());
-                                                    if (p.getTrangThai() != 0) {
+                                                for (ThuTien dtoTT : listThuTien) {
+                                                    int ThangThue = DAO.Home.getThangThueByID(dtoTT.getIdPhong());
+                                                    if (dtoTT.getTrangThai() != 0) {
                                             %>
                                             <tr>
-                                                <td><%= p.getIdThuTien()%></td>
-                                                <td><%= p.getIdPhong()%></td>                                        
+                                                <td><%= dtoTT.getIdThuTien()%></td>
+                                                <td><%= dtoTT.getIdPhong()%></td>                                        
                                                 <td><%= ThangThue%></td>
-                                                <td><%= String.format("%.0f", p.getTongTien())%></td>
-                                                <td><%= p.getSoDien()%></td>
-                                                <td><%= p.getSoNuoc()%></td>
+                                                <td><%= String.format("%.0f", dtoTT.getTongTien())%></td>
+                                                <td><%= dtoTT.getSoDien()%></td>
+                                                <td><%= dtoTT.getSoNuoc()%></td>
                                                 <%
-                                                    if (p.getTrangThai() == 1) {
+                                                    if (dtoTT.getTrangThai() == 1) {
                                                 %>
                                                 <td>Đã thanh toán</td>
                                                 <%
-                                                } else if (p.getTrangThai() == 2) {
+                                                } else if (dtoTT.getTrangThai() == 2) {
                                                 %>
                                                 <td>Chưa thanh toán</td>
                                                 <%
                                                     }
                                                 %>
                                                 <td>
-                                                    <a onclick="confDel(<%= p.getIdThuTien()%>)" class="btn btn-danger btn-circle" style="margin-left: 15%;">
+                                                    <a onclick="confDel(<%= dtoTT.getIdThuTien()%>)" class="btn btn-danger btn-circle" style="margin-left: 15%;">
                                                         <i class="fas fa-trash"></i>
                                                     </a>
-                                                    <a href="CRUD?id=<%= p.getIdThuTien()%>&type=edit&manage=TT&idPhong=<%= p.getIdPhong()%>" class="btn btn-info btn-circle">
+                                                    <a href="CRUD?id=<%= dtoTT.getIdThuTien()%>&type=edit&manage=TT&idPhong=<%= dtoTT.getIdPhong()%>" class="btn btn-info btn-circle">
                                                         <i class="fas fa-pen"></i>
                                                     </a>
                                                 </td>
@@ -251,15 +251,15 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Bạn muốn Đăng Xuất ?</h5>
                         <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
                     </div>
-                    <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                    <div class="modal-body">Chọn Đăng Xuất bên dưới nếu muốn kết thúc phiên đăng nhập.</div>
                     <div class="modal-footer">
-                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                        <a class="btn btn-primary" href="Login.jsp">Logout</a>
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Hủy</button>
+                        <a class="btn btn-primary" href="Login.jsp">Đăng Xuất</a>
                     </div>
                 </div>
             </div>
@@ -269,7 +269,7 @@
 
         <script>
             function confDel(id) {
-                if (confirm("Are you sure you want to delete this column?") == true) {
+                if (confirm("Bạn Muốn Xóa Hóa Đơn Thu Tiền Này ?") == true) {
                     document.location.href = "CRUD?id=" + id + "&type=del&manage=TT";
                 } else {
 

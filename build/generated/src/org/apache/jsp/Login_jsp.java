@@ -52,10 +52,6 @@ public final class Login_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("        <title>Login Page</title>\n");
       out.write("    </head>\n");
       out.write("    <body>\n");
-      out.write("        ");
-
-            session.setAttribute("username",null);
-        
       out.write("\n");
       out.write("        <section class=\"vh-100\" style=\"background-color: #508bfc;\">\n");
       out.write("            <div class=\"container py-5 h-100\">\n");

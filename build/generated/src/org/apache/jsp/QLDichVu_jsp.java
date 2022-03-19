@@ -107,8 +107,9 @@ public final class QLDichVu_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("                    <div id=\"collapseTwo\" class=\"collapse\" aria-labelledby=\"headingTwo\" data-parent=\"#accordionSidebar\">\n");
       out.write("                        <div class=\"bg-white py-2 collapse-inner rounded\">\n");
       out.write("                            <a class=\"collapse-item\" href=\"ThemVaSuaKH.jsp\">Khách Hàng</a>\n");
-      out.write("                            <a class=\"collapse-item\" href=\"cards.html\">Dịch Vụ</a>\n");
-      out.write("                            <a class=\"collapse-item\" href=\"ThemVaSuaPhong.jsp\">Phòng trọ</a>\n");
+      out.write("                            <a class=\"collapse-item\" href=\"ThemVaSuaDV.jsp\">Dịch Vụ</a>\n");
+      out.write("                            <a class=\"collapse-item\" href=\"ThemVaSuaPhong.jsp\">Phòng Trọ</a>\n");
+      out.write("                            <a class=\"collapse-item\" href=\"ThemVaSuaTT.jsp\">Hoá Đơn</a>\n");
       out.write("                        </div>\n");
       out.write("                    </div>\n");
       out.write("                </li>\n");
@@ -130,6 +131,7 @@ public final class QLDichVu_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("                            <div class=\"collapse-divider\"></div>\n");
       out.write("                            <h6 class=\"collapse-header\">Phòng Trọ:</h6>\n");
       out.write("                            <a class=\"collapse-item\" href=QLPhong.jsp>Phòng trọ</a>\n");
+      out.write("                            <a class=\"collapse-item\" href=\"QLThuTien.jsp\">Tiền Thuê</a>\n");
       out.write("                            <div class=\"collapse-divider\"></div>\n");
       out.write("                            <h6 class=\"collapse-header\">Khách Hàng:</h6>\n");
       out.write("                            <a class=\"collapse-item\" href=\"QLKH.jsp\">Khách hàng</a>\n");
@@ -172,7 +174,7 @@ public final class QLDichVu_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("                                <a class=\"nav-link dropdown-toggle\" href=\"#\" id=\"userDropdown\" role=\"button\"\n");
       out.write("                                   data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\n");
       out.write("                                    <span class=\"mr-2 d-none d-lg-inline text-gray-600 small\">");
-      out.print(session.getAttribute("username"));
+      out.print(session.getAttribute("account"));
       out.write("</span>\n");
       out.write("                                    <img class=\"img-profile rounded-circle\"\n");
       out.write("                                         src=\"img/undraw_profile.svg\">\n");
@@ -198,7 +200,7 @@ public final class QLDichVu_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("                        <!-- DataTales Example -->\n");
       out.write("                        <div class=\"card shadow mb-4\">\n");
       out.write("                            <div class=\"card-header py-3\">\n");
-      out.write("                                <h6 class=\"m-0 font-weight-bold text-primary\">Quản Lý Khách Hàng</h6>\n");
+      out.write("                                <h6 class=\"m-0 font-weight-bold text-primary\">Quản Lý Dịch Vụ</h6>\n");
       out.write("                            </div>\n");
       out.write("                            <div class=\"card-body\">\n");
       out.write("                                <div class=\"table-responsive\">\n");
@@ -245,7 +247,9 @@ public final class QLDichVu_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("                                                    </a>\n");
       out.write("                                                    <a href=\"CRUD?id=");
       out.print( p.getIdDV());
-      out.write("&type=edit&manage=DV\" class=\"btn btn-info btn-circle\">\n");
+      out.write("&type=edit&manage=DV&idTT=");
+      out.print( p.getIdThuTien() );
+      out.write("\" class=\"btn btn-info btn-circle\">\n");
       out.write("                                                        <i class=\"fas fa-pen\"></i>\n");
       out.write("                                                    </a>\n");
       out.write("                                                </td>\n");
@@ -313,14 +317,13 @@ public final class QLDichVu_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("\n");
       out.write("        <script>\n");
       out.write("            function confDel(id) {\n");
-      out.write("                if (confirm(\"Xác nhận xóa phòng ?\") == true) {\n");
+      out.write("                if (confirm(\"Are you sure you want to delete this column?\") == true) {\n");
       out.write("                    document.location.href = \"CRUD?id=\" + id + \"&type=del&manage=DV\";\n");
       out.write("                } else {\n");
       out.write("\n");
       out.write("                }\n");
       out.write("            }\n");
       out.write("        </script>\n");
-      out.write("        \n");
       out.write("        <!-- Bootstrap core JavaScript-->\n");
       out.write("        <script src=\"vendor/jquery/jquery.min.js\"></script>\n");
       out.write("        <script src=\"vendor/bootstrap/js/bootstrap.bundle.min.js\"></script>\n");

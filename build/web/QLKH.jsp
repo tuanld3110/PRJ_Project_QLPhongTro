@@ -1,12 +1,12 @@
 <%-- 
     Document   : Home
     Created on : Feb 21, 2022, 9:47:14 AM
-    Author     : crrtt
+    Author     : 84915
 --%>
 
-<%@page import="DTO.KhachHang"%>
+<%@page import="model.KhachHang"%>
 <%@page import="javax.xml.ws.Holder"%>
-<%@page import="DTO.PhongTro"%>
+<%@page import="model.PhongTro"%>
 <%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -137,7 +137,7 @@
                                      aria-labelledby="userDropdown">
                                     <a class="dropdown-item" href="" data-toggle="modal" data-target="#logoutModal">
                                         <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                        Logout
+                                        Đăng Xuất
                                     </a>
                                 </div>
                             </li>
@@ -169,23 +169,23 @@
                                             </tr>
                                         </thead>
                                         <%
-                                            ArrayList<KhachHang> al = DAO.Home.getKhachHang();
+                                            ArrayList<KhachHang> listKhachHang = DAO.Home.getKhachHang();
                                         %>
                                         <tbody>
                                             <%
-                                                for (KhachHang p : al) {
+                                                for (KhachHang kh : listKhachHang) {
                                             %>
                                             <tr>
-                                                <td><%= p.getIdKH()%></td>
-                                                <td><%= p.getTenKH()%></td>
-                                                <td><%= p.getSDT()%></td>
-                                                <td><%= p.getCMND()%> </td>
+                                                <td><%= kh.getIdKH()%></td>
+                                                <td><%= kh.getTenKH()%></td>
+                                                <td><%= kh.getSDT()%></td>
+                                                <td><%= kh.getCMND()%> </td>
                                                 <td>
-                                                    <%if (p.getGioiTinh() == 1) {
+                                                    <%if (kh.getGioiTinh() == 1) {
                                                     %>
                                                     Nam
                                                     <%
-                                                    } else if (p.getGioiTinh() == 2) {
+                                                    } else if (kh.getGioiTinh() == 2) {
                                                     %>
                                                     Nữ
                                                     <%
@@ -197,10 +197,10 @@
                                                     %>
                                                 </td>
                                                 <td>
-                                                    <a onclick="confDel(<%= p.getIdKH()%>)" class="btn btn-danger btn-circle" style="margin-left: 24%;">
+                                                    <a onclick="confDel(<%= kh.getIdKH()%>)" class="btn btn-danger btn-circle" style="margin-left: 24%;">
                                                         <i class="fas fa-trash"></i>
                                                     </a>
-                                                    <a href="CRUD?id=<%= p.getIdKH()%>&type=edit&manage=KH" class="btn btn-info btn-circle">
+                                                    <a href="CRUD?id=<%= kh.getIdKH()%>&type=edit&manage=KH" class="btn btn-info btn-circle">
                                                         <i class="fas fa-pen"></i>
                                                     </a>
                                                 </td>
@@ -247,15 +247,15 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Bạn muốn Đăng Xuất ?</h5>
                         <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
                     </div>
-                    <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                    <div class="modal-body">Chọn Đăng Xuất bên dưới nếu muốn kết thúc phiên đăng nhập.</div>
                     <div class="modal-footer">
-                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                        <a class="btn btn-primary" href="Login.jsp">Logout</a>
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Hủy</button>
+                        <a class="btn btn-primary" href="Login.jsp">Đăng Xuất</a>
                     </div>
                 </div>
             </div>
@@ -265,7 +265,7 @@
 
         <script>
             function confDel(id) {
-                if (confirm("Are you sure you want to delete this column?") == true) {
+                if (confirm("Bạn Muốn Xóa Khách Hàng Này ?") == true) {
                     document.location.href = "CRUD?id=" + id + "&type=del&manage=KH";
                 } else {
 

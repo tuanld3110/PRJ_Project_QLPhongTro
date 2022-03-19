@@ -1,12 +1,12 @@
 <%-- 
     Document   : Home
     Created on : Feb 21, 2022, 9:47:14 AM
-    Author     : crrtt
+    Author     : 84915
 --%>
 
-<%@page import="DTO.KhachHang"%>
+<%@page import="model.KhachHang"%>
 <%@page import="javax.xml.ws.Holder"%>
-<%@page import="DTO.PhongTro"%>
+<%@page import="model.PhongTro"%>
 <%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -148,7 +148,7 @@
                                      aria-labelledby="userDropdown">
                                     <a class="dropdown-item" href="" data-toggle="modal" data-target="#logoutModal">
                                         <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                        Logout
+                                        Đăng Xuất
                                     </a>
                                 </div>
                             </li>
@@ -172,15 +172,14 @@
                                         <input type="hidden" name="manage" value="phongtro">
                                         <%
                                             String type = "";
-                                            request.setAttribute("manage", "phongtro");
                                             try {
                                                 type = request.getAttribute("type").toString();
                                             } catch (Exception e) {
                                                 type = "add";
                                             }
                                             if (type == "edit") {
-                                                ArrayList<PhongTro> a3 = DAO.Home.getPhongTroByID(Integer.parseInt(request.getAttribute("id").toString()));
-                                                for (PhongTro dtophongtro : a3) {
+                                                ArrayList<PhongTro> listPhongTroByID = DAO.Home.getPhongTroByID(Integer.parseInt(request.getAttribute("id").toString()));
+                                                for (PhongTro dtophongtro : listPhongTroByID) {
                                         %>
                                         <h3 class="mb-5">Thay đổi thông tin</h3>
                                         <div class="form-outline mb-4">
@@ -193,15 +192,15 @@
                                         <div class="form-outline mb-4">
                                             <select name="idKH" class="form-control form-control-lg"  id="gender">
                                                 <%
-                                                    ArrayList<KhachHang> a2 = DAO.Home.getKhachHang();
-                                                    for (KhachHang dto : a2) {
-                                                        if (dto.getIdKH() == dtophongtro.getIdKH()) {
+                                                    ArrayList<KhachHang> listKhachHang = DAO.Home.getKhachHang();
+                                                    for (KhachHang dtokhachhang : listKhachHang) {
+                                                        if (dtokhachhang.getIdKH() == dtophongtro.getIdKH()) {
                                                 %>
-                                                <option value="<%= dto.getIdKH()%>" selected><%= dto.getTenKH()%></option>
+                                                <option value="<%= dtokhachhang.getIdKH()%>" selected><%= dtokhachhang.getTenKH()%></option>
                                                 <%
                                                 } else {
                                                 %>
-                                                <option value="<%= dto.getIdKH()%>"><%= dto.getTenKH()%></option>
+                                                <option value="<%= dtokhachhang.getIdKH()%>"><%= dtokhachhang.getTenKH()%></option>
                                                 <%
                                                         }
                                                     }
@@ -370,15 +369,15 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Bạn muốn Đăng Xuất ?</h5>
                         <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
                     </div>
-                    <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                    <div class="modal-body">Chọn Đăng Xuất bên dưới nếu muốn kết thúc phiên đăng nhập.</div>
                     <div class="modal-footer">
-                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                        <a class="btn btn-primary" href="Login.jsp">Logout</a>
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Hủy</button>
+                        <a class="btn btn-primary" href="Login.jsp">Đăng Xuất</a>
                     </div>
                 </div>
             </div>

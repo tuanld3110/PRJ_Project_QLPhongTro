@@ -1,7 +1,7 @@
 <%-- 
     Document   : Login
     Created on : Feb 21, 2022, 6:28:53 AM
-    Author     : crrtt
+    Author     : 84915
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -13,9 +13,7 @@
         <title>Login Page</title>
     </head>
     <body>
-        <%
-            session.setAttribute("username",null);
-        %>
+
         <section class="vh-100" style="background-color: #508bfc;">
             <div class="container py-5 h-100">
                 <div class="row d-flex justify-content-center align-items-center h-100">

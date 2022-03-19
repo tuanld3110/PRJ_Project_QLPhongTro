@@ -1,14 +1,14 @@
 <%-- 
     Document   : Home
     Created on : Feb 21, 2022, 9:47:14 AM
-    Author     : crrtt
+    Author     : 84915
 --%>
 
-<%@page import="DTO.ThuTien"%>
-<%@page import="DTO.DichVu"%>
-<%@page import="DTO.KhachHang"%>
+<%@page import="model.ThuTien"%>
+<%@page import="model.DichVu"%>
+<%@page import="model.KhachHang"%>
 <%@page import="javax.xml.ws.Holder"%>
-<%@page import="DTO.PhongTro"%>
+<%@page import="model.PhongTro"%>
 <%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -149,7 +149,7 @@
                                      aria-labelledby="userDropdown">
                                     <a class="dropdown-item" href="" data-toggle="modal" data-target="#logoutModal">
                                         <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                        Logout
+                                        Đăng Xuất
                                     </a>
                                 </div>
                             </li>
@@ -193,16 +193,16 @@
                                         <div class="form-outline mb-4">
                                             <select name="idPhong" class="form-control form-control-lg"  id="gender" onchange="myFunction(this.value)">
                                                 <%
-                                                    ArrayList<PhongTro> arr = DAO.Home.getPhongTro();
-                                                    for (PhongTro dtoEdit : arr) {
-                                                        if (dtoEdit.getIdPhong() == Integer.parseInt(request.getParameter("idPhong"))) {
+                                                    ArrayList<PhongTro> listPhongTro = DAO.Home.getPhongTro();
+                                                    for (PhongTro dtoPT : listPhongTro) {
+                                                        if (dtoPT.getIdPhong() == Integer.parseInt(request.getParameter("idPhong"))) {
                                                 %>
-                                                <option value="<%= dtoEdit.getIdPhong()%>.<%= dtoEdit.getThangThue()%>" selected><%= dtoEdit.getIdPhong()%></option>
+                                                <option value="<%= dtoPT.getIdPhong()%>.<%= dtoPT.getThangThue()%>" selected><%= dtoPT.getIdPhong()%></option>
                                                 <%
-                                                } else if (dtoEdit.getTrangThai() == 1) {
+                                                } else if (dtoPT.getTrangThai() == 1) {
 
                                                 %>
-                                                <option value="<%= dtoEdit.getIdPhong()%>.<%= dtoEdit.getThangThue()%>"><%= dtoEdit.getIdPhong()%></option>
+                                                <option value="<%= dtoPT.getIdPhong()%>.<%= dtoPT.getThangThue()%>"><%= dtoPT.getIdPhong()%></option>
                                                 <%
                                                         }
                                                     }
@@ -254,11 +254,11 @@
                                         <div class="form-outline mb-4">
                                             <select name="idPhong" class="form-control form-control-lg"  id="gender" onchange="myFunction(this.value)">
                                                 <%
-                                                    ArrayList<PhongTro> arr = DAO.Home.getPhongTro();
-                                                    for (PhongTro dtoEdit : arr) {
-                                                        if (dtoEdit.getTrangThai() == 1) {
+                                                    ArrayList<PhongTro> listPhongTro = DAO.Home.getPhongTro();
+                                                    for (PhongTro dtoPT : listPhongTro) {
+                                                        if (dtoPT.getTrangThai() == 1) {
                                                 %>
-                                                <option value="<%= dtoEdit.getIdPhong()%>.<%= dtoEdit.getThangThue()%>"><%= dtoEdit.getIdPhong()%></option>
+                                                <option value="<%= dtoPT.getIdPhong()%>.<%= dtoPT.getThangThue()%>"><%= dtoPT.getIdPhong()%></option>
                                                 <%
                                                         }
                                                     }
@@ -287,7 +287,8 @@
                                         </div>
 
                                         <button class="btn btn-primary btn-lg btn-block" type="submit"  name="type" value="add">Thêm</button>
-                                        <%                                            }
+                                        <% 
+                                            }
                                         %>
                                     </form>
                                 </div>
@@ -327,15 +328,15 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Bạn muốn Đăng Xuất ?</h5>
                         <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
                     </div>
-                    <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                    <div class="modal-body">Chọn Đăng Xuất bên dưới nếu muốn kết thúc phiên đăng nhập.</div>
                     <div class="modal-footer">
-                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                        <a class="btn btn-primary" href="Login.jsp">Logout</a>
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Hủy</button>
+                        <a class="btn btn-primary" href="Login.jsp">Đăng Xuất</a>
                     </div>
                 </div>
             </div>
