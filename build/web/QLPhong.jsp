@@ -182,8 +182,8 @@
                                                     %>
 
                                                     <%
-                                                        ArrayList<KhachHang> a2 = DAO.Home.getKhachHangByID(p.getIdKH());
-                                                        for (KhachHang kh : a2) {
+                                                        ArrayList<KhachHang> listKHByID = DAO.Home.getKhachHangByID(p.getIdKH());
+                                                        for (KhachHang kh : listKHByID) {
                                                     %>
 
                                                     <%= kh.getTenKH()%>

@@ -288,10 +288,10 @@
                                             <select name="idKH" class="form-control form-control-lg"  id="gender">
                                                 <option value="0">Trống</option>
                                                 <%
-                                                    ArrayList<KhachHang> a2 = DAO.Home.getKhachHang();
-                                                    for (KhachHang dto : a2) {
+                                                    ArrayList<KhachHang> listKhachHang = DAO.Home.getKhachHang();
+                                                    for (KhachHang dtoKH : listKhachHang) {
                                                 %>
-                                                <option value="<%= dto.getIdKH()%>"><%= dto.getTenKH()%></option>
+                                                <option value="<%= dtoKH.getIdKH()%>"><%= dtoKH.getTenKH()%></option>
                                                 <%
                                                     }
                                                 %>
